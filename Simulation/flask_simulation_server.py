@@ -1,13 +1,14 @@
 import flask
 from flask import request, jsonify
 import psycopg2,collections
+import psycopg2.extras
 import datetime, json
 
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
-conn = psycopg2.connect(host="127.0.0.1",port="5432",dbname="Simulation", user="postgres", password="pierre")
+conn = psycopg2.connect(host="127.0.0.1",port="5432",dbname="Simulation", user="postgres", password="postgres")
 
 
 @app.route('/', methods=['GET'])
@@ -24,7 +25,7 @@ def api_sensor():
         count = 0
         print(sensor["id"])
         cur = conn.cursor()
-        query = "update sensor set value = %s, date = %s where id = %s " 
+        query = "update sensor set value = %s, date = %s where id = %s "
         values = (sensor["value"], datetime.datetime.now(),sensor["id"])
         cur.execute(query, values)
         conn.commit()
@@ -36,25 +37,25 @@ def api_sensor():
 @app.route('/api/sensors', methods=['GET', 'POST'])
 def api_sensors():
     if request.method == 'GET':
-        cur = conn.cursor()
-        query = "SELECT id, code, latitude, longitude, row, sensor.column, value, date, type_id FROM sensor" 
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor);
+        query = "SELECT id, code, latitude, longitude, row, sensor.column, value, date, type_id FROM sensor"
         cur.execute(query)
         rows = cur.fetchall()
         objects_list = []
         for row in rows:
             d = collections.OrderedDict()
-            d["id"] = int(row[0])
-            d["code"] = row[1]
-            d["latitude"] = int(row[2])
-            d["longitude"] = int(row[3])
-            d["row"] = int(row[4])
-            d["column"] = int(row[5])
+            d["id"] = int(row['id'])
+            d["code"] = row['code']
+            d["latitude"] = int(row['latitude'])
+            d["longitude"] = int(row['longitude'])
+            d["row"] = int(row['row'])
+            d["column"] = int(row['column'])
             if row[6]:
-                d["value"] = int(row[6])
+                d["value"] = int(row['value'])
             else :
                 d["value"] = 0
-            d["date"] = row[7]
-            d["type_id"] = int(row[8])
+            d["date"] = row['date']
+            d["type_id"] = int(row['type_id'])
             objects_list.append(d)
         return jsonify(objects_list)
     elif request.method == 'POST':
@@ -63,7 +64,7 @@ def api_sensors():
         for sensor in sensors:
             print(sensor["id"])
             cur = conn.cursor()
-            query = "update sensor set value = %s, date = %s where id = %s " 
+            query = "update sensor set value = %s, date = %s where id = %s "
             values = (sensor["value"], datetime.datetime.now(),sensor["id"])
             cur.execute(query, values)
             conn.commit()
@@ -71,4 +72,4 @@ def api_sensors():
         print(count, "lignes mis à jour dans la table sensor")
         return sensors
 
-app.run()
+app.run(host='0.0.0.0')
