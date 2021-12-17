@@ -1,11 +1,16 @@
 import flask
 from flask import request, jsonify
+from flask_cors import CORS,cross_origin
 import psycopg2,collections
 import datetime, json
 
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
+
+CORS(app, resources={r"/*": {"origins": "*"}})
+app.config['CORS_HEADERS'] = 'application/json'
+
 
 conn = psycopg2.connect(host="127.0.0.1",port="5432",dbname="Emergency", user="postgres", password="pierre")
 
@@ -17,7 +22,7 @@ def home():
 
 
 # A route to return all of the available entries in our catalog.
-@app.route('/api/sensor_data', methods=['GET', 'POST'])
+@app.route('/api/historique', methods=['GET', 'POST'])
 def api_sensor_data():
     if request.method == 'GET':
         cur = conn.cursor()
@@ -39,16 +44,15 @@ def api_sensor_data():
             objects_list.append(d)
         return jsonify(rows)
     elif request.method == 'POST':
-        sensor=request.json #SENSORS
+        sensor=request.json 
         count = 0
-        #for sensor in sensors:
         print(sensor["id"])
         cur = conn.cursor()
-        query = "update sensor set value = %s, date = %s where id = %s " 
-        values = (sensor["value"], datetime.datetime.now(),sensor["id"])
+        query = "update capteur_donne set valeur = %s, date = %s where id_capteur = %s and id_type_capteur = %s" 
+        values = (sensor["valeur"], datetime.datetime.now(),sensor["id_capteur"],sensor["id_type_capteur"])
         cur.execute(query, values)
         conn.commit()
-        query = "insert into sensor_data_hst () values () " 
+        query = "insert into historique (id_capteur,id_type_capteur,valeur,date) values (%s,%s,%s) " 
         values = (sensor["value"], datetime.datetime.now(),sensor["id"])
         cur.execute(query, values)
         conn.commit()
@@ -61,7 +65,7 @@ def api_sensor_data():
 @app.route('/api/capteur', methods=['GET'])
 def api_sensor():
     cur = conn.cursor()
-    query = "SELECT id, id_modele_capteur, code, latitude, longitude, ligne, colonne, intensity, date FROM capteur" 
+    query = "SELECT id, id_modele_capteur, code, latitude, longitude, ligne, colonne FROM capteur" 
     cur.execute(query)
     rows = cur.fetchall()
     objects_list = []
@@ -72,13 +76,8 @@ def api_sensor():
         d["code"] = row[2]
         d["latitude"] = int(row[3])
         d["longitude"] = int(row[4])
-        d["row"] = int(row[5])
-        d["column"] = int(row[6])
-        if row[7]:
-            d["value"] = int(row[7])
-        else :
-            d["value"] = None
-        d["date"] = row[8]
+        d["ligne"] = int(row[5])
+        d["colonne"] = int(row[6])
         objects_list.append(d)
     return jsonify(objects_list)
 
@@ -118,9 +117,9 @@ def api_caserne_post():
         if key=="tel" & caserne[key]!=None:
             requete += "tel =" + caserne[key]
         if key=="longitude" & caserne[key]!=None:
-            requete += "longitude =" + caserne[key]
+            requete += "longitude =" + str(caserne[key])
         if key=="latitude" & caserne[key]!=None:
-            requete += "latitude =" + caserne[key]
+            requete += "latitude =" + str(caserne[key])
     requete += "where id = %s"
     cur = conn.cursor()
     values = (caserne["id"])
@@ -130,13 +129,13 @@ def api_caserne_post():
 @app.route('/api/caserne', methods=['PUT'])
 def api_caserne_put():
     caserne=request.json
-    caserne[id]
-    requete = "insert into caserne (nom,adresse,code_postal,ville,tel,longitude,latitude) values (%s, %s,%s, %s, %s, %s,%s) " 
-    values = (caserne["nom"],caserne["adresse"],caserne["code_postal"],caserne["ville"],caserne["tel"],caserne["longitude"],caserne["latitude"])
-    cur = conn.cursor()
-    cur.execute(requete, values)
-    conn.commit()
-    cur = conn.cursor()
-    values = (caserne["id"])
-    cur.execute(requete, values)
-app.run()
+    print(caserne)
+    if "nom" in caserne & "adresse" in caserne & "code_postal" in caserne & "ville" in caserne & "tel" in caserne & "longitude" in caserne & "latitude" in caserne:
+        requete = "insert into caserne (nom,adresse,code_postal,ville,tel,longitude,latitude) values (%s, %s,%s, %s, %s, %s,%s) " 
+        values = (caserne["nom"],caserne["adresse"],caserne["code_postal"],caserne["ville"],caserne["tel"],caserne["longitude"],caserne["latitude"])
+        cur = conn.cursor()
+        cur.execute(requete, values)
+        conn.commit()
+    else :
+        return {400,}
+    return {201,}
