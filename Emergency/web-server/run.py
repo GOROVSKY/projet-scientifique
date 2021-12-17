@@ -58,31 +58,32 @@ def api_sensor_data():
 
 
 
-@app.route('/api/sensors', methods=['GET'])
+@app.route('/api/capteur', methods=['GET'])
 def api_sensor():
     cur = conn.cursor()
-    query = "SELECT id, code, latitude, longitude, row, column, intensity, date FROM sensor" 
+    query = "SELECT id, id_modele_capteur, code, latitude, longitude, ligne, colonne, intensity, date FROM capteur" 
     cur.execute(query)
     rows = cur.fetchall()
     objects_list = []
     for row in rows:
         d = collections.OrderedDict()
         d["id"] = int(row[0])
-        d["code"] = row[1]
-        d["latitude"] = int(row[2])
-        d["longitude"] = int(row[3])
-        d["row"] = int(row[4])
-        d["column"] = int(row[5])
-        if row[6]:
-            d["value"] = int(row[6])
+        d["id_modele_capteur"] = int(row[1])
+        d["code"] = row[2]
+        d["latitude"] = int(row[3])
+        d["longitude"] = int(row[4])
+        d["row"] = int(row[5])
+        d["column"] = int(row[6])
+        if row[7]:
+            d["value"] = int(row[7])
         else :
             d["value"] = None
-        d["date"] = row[7]
+        d["date"] = row[8]
         objects_list.append(d)
     return jsonify(objects_list)
 
-@app.route('/api/casernes', methods=['GET'])
-def api_sensor():
+@app.route('/api/caserne', methods=['GET'])
+def api_caserne_get():
     cur = conn.cursor()
     query = "SELECT id, nom, adresse, code_postal, ville, tel, longitude, latitude FROM caserne" 
     cur.execute(query)
@@ -102,10 +103,40 @@ def api_sensor():
     return jsonify(objects_list)
 
 @app.route('/api/caserne', methods=['POST'])
-def api_sensor():
+def api_caserne_post():
+    caserne=request.json
+    requete = "update caserne set"
+    for key in caserne:
+        if key=="nom" & caserne[key]!=None:
+            requete += "nom =" + caserne[key]
+        if key=="adresse" & caserne[key]!=None:
+            requete += "adresse =" + caserne[key]
+        if key=="code_postal" & caserne[key]!=None:
+            requete += "code_postal =" + caserne[key]
+        if key=="ville" & caserne[key]!=None:
+            requete += "ville =" + caserne[key]
+        if key=="tel" & caserne[key]!=None:
+            requete += "tel =" + caserne[key]
+        if key=="longitude" & caserne[key]!=None:
+            requete += "longitude =" + caserne[key]
+        if key=="latitude" & caserne[key]!=None:
+            requete += "latitude =" + caserne[key]
+    requete += "where id = %s"
     cur = conn.cursor()
-    query = "update sensor set value = %s, date = %s where id = %s "
-    values = (sensor["value"], datetime.datetime.now(),sensor["id"])
-    cur.execute(query, values)
+    values = (caserne["id"])
+    cur.execute(requete, values)
+    conn.commit()
 
+@app.route('/api/caserne', methods=['PUT'])
+def api_caserne_put():
+    caserne=request.json
+    caserne[id]
+    requete = "insert into caserne (nom,adresse,code_postal,ville,tel,longitude,latitude) values (%s, %s,%s, %s, %s, %s,%s) " 
+    values = (caserne["nom"],caserne["adresse"],caserne["code_postal"],caserne["ville"],caserne["tel"],caserne["longitude"],caserne["latitude"])
+    cur = conn.cursor()
+    cur.execute(requete, values)
+    conn.commit()
+    cur = conn.cursor()
+    values = (caserne["id"])
+    cur.execute(requete, values)
 app.run()
