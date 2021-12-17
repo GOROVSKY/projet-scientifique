@@ -81,4 +81,31 @@ def api_sensor():
         objects_list.append(d)
     return jsonify(objects_list)
 
+@app.route('/api/casernes', methods=['GET'])
+def api_sensor():
+    cur = conn.cursor()
+    query = "SELECT id, nom, adresse, code_postal, ville, tel, longitude, latitude FROM caserne" 
+    cur.execute(query)
+    rows = cur.fetchall()
+    objects_list = []
+    for row in rows:
+        d = collections.OrderedDict()
+        d["id"] = int(row[0])
+        d["nom"] = row[1]
+        d["adresse"] = row[2]
+        d["code_postal"] = row[3]
+        d["ville"] = row[4]
+        d["tel"] = row[5]
+        d["longitude"] = row[6]
+        d["latitude"] = row[7]
+        objects_list.append(d)
+    return jsonify(objects_list)
+
+@app.route('/api/caserne', methods=['POST'])
+def api_sensor():
+    cur = conn.cursor()
+    query = "update sensor set value = %s, date = %s where id = %s "
+    values = (sensor["value"], datetime.datetime.now(),sensor["id"])
+    cur.execute(query, values)
+
 app.run()
