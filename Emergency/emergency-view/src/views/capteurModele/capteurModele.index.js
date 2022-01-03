@@ -1,27 +1,17 @@
-import api from '@/api/api.js'
 
-import PompierModifier from './pompier.modifier.vue';
+import api from '@/api/api.js'
+import CapteurModeleModifier from './capteurModele.modifier.vue';
 
 export default {
-    name: 'PompierIndex',
+    name: 'CapteurModeleIndex',
 
     components: {
-        PompierModifier
+        CapteurModeleModifier
     },
 
     data() {
         return {
-            liste: [
-                {
-                    nom: "DUPONT",
-                    prenom: "Jean",
-                    age: 21,
-                    tel: "06 18 25 33 05",
-                    energie: "90%",
-                    caserneNom: 'Caserne de Lyon',
-                    anneeExperience: 5
-                }
-            ],
+            liste: [],
             afficherModale: false,
             elementSelectionne: null
         }
@@ -29,10 +19,10 @@ export default {
 
     methods: {
         recupererListe() {
-            // api.recuperer("pompier")
-            //     .then(result => {
-            //         this.liste = result.data;
-            //     })
+            api.recuperer("modeleCapteur")
+                .then(result => {
+                    this.liste = result.data;
+                })
         },
 
         ajouter() {
@@ -45,7 +35,7 @@ export default {
         },
 
         supprimer(element) {
-            api.supprimer("pompier", { id: element.id })
+            api.supprimer("modeleCapteur", { id: element.id })
                 .then(() => {
                     this.recupererListe();
                 })

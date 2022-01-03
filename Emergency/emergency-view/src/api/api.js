@@ -2,37 +2,45 @@ import axios from "axios";
 
 
 export default {
-     API_URL: "http://172.20.10.2:5000/api/",
+     API_URL: "http://127.0.0.1:5000/api",
 
      // appeler(methods, params) {
 
      // },
 
-     recuperer(methode, params) {
-          return axios.get(`${this.API_URL}/${methode}`, params)
-             .then(result => {
-                 return result
-          })
+     recuperer(methode, params = {}) {
+          var url = `${this.API_URL}/${methode}`
+          if (params["id"] != null ) {
+               url += `/${params["id"]}`
+          }
+
+          return axios.get(url)
+               .then(result => {
+                    if (params["id"] != null) {
+                         result.data = result.data[0]
+                    }
+                    return result
+               })
      },
 
      inserer(methode, params) {
           return axios.put(`${this.API_URL}/${methode}`, params)
-             .then(result => {
-                 return result
-          })
+               .then(result => {
+                    return result
+               })
      },
-     
+
      mettreAJour(methode, params) {
           return axios.post(`${this.API_URL}/${methode}`, params)
-             .then(result => {
-                 return result
-          })
+               .then(result => {
+                    return result
+               })
      },
 
      supprimer(methode, params) {
-          return axios.delete(`${this.API_URL}/${methode}`, params)
-             .then(result => {
-                 return result
-          })
+          return axios.delete(`${this.API_URL}/${methode}/${params["id"]}`, params)
+               .then(result => {
+                    return result
+               })
      }
 }
