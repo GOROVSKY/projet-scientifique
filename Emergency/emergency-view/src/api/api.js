@@ -38,9 +38,18 @@ export default {
      },
 
      supprimer(methode, params) {
-          return axios.delete(`${this.API_URL}/${methode}/${params["id"]}`, params)
+          var url = `${this.API_URL}/${methode}/${params["id"]}`
+          return axios.delete(url, params)
                .then(result => {
                     return result
                })
-     }
+     },
+
+     supprimerIds(methode, params) {
+          var url = `${this.API_URL}/${methode}/${params["id1"]}&${params["id2"]}`
+          return axios.delete(url, params)
+               .then(result => {
+                    return result
+               })
+     },
 }

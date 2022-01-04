@@ -163,6 +163,20 @@ def put_modele_type_capteur():
 
     return "", 201
 
+@app.route('/api/modeleTypeCapteur/<id_modele_capteur>&<id_type_capteur>', methods=['DELETE'])
+def delete_modele_type_capteur(id_modele_capteur, id_type_capteur):
+
+    if id_modele_capteur is None or id_type_capteur is None:
+        abort(422)
+
+    requete = "DELETE FROM modele_type_capteur WHERE id_modele_capteur = %s AND id_type_capteur = %s"
+
+    cur = conn.cursor()
+    cur.execute(requete, (id_modele_capteur, id_type_capteur))
+    conn.commit()
+
+    return "", 200
+
 ##### MODELE_CAPTEUR #####
 @app.route('/api/modeleCapteur', methods=['GET'])
 @app.route('/api/modeleCapteur/<id>', methods=['GET'])
@@ -192,7 +206,7 @@ def get_modele_capteur(id=None):
         d["types_capteur"] = []
         tmp = list(filter(lambda x: x[0] == row["id"], mtc))
         for i in tmp:
-            dico = { 'libelle' : i[2] }
+            dico = { 'id': i[1], 'libelle' : i[2] }
             d["types_capteur"].append(dico.copy())
         
         objects_list.append(d)

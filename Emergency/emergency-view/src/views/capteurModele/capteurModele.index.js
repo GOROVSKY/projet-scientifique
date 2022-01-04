@@ -67,7 +67,7 @@ export default {
         },
 
         supprimerType(element, type) {
-            api.supprimer("modeleTypeCapteur", { id_modele_capteur: element.id, id_type_capteur: type.id}).then(() => {
+            api.supprimerIds("modeleTypeCapteur", { id1: element.id, id2: type.id}).then(() => {
                 this.recupererListe();
             })
         }
