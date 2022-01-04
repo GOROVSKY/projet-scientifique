@@ -27,11 +27,30 @@ SET default_table_access_method = heap;
 -- Name: capteur; Type: TABLE; Schema: public; Owner: postgres
 --
 
+DROP TABLE IF EXISTS capteur CASCADE;
+DROP TABLE IF EXISTS capteur_donnees CASCADE;
+DROP TABLE IF EXISTS caserne CASCADE;
+DROP TABLE IF EXISTS detection CASCADE;
+DROP TABLE IF EXISTS historique CASCADE;
+DROP TABLE IF EXISTS incident CASCADE;
+DROP TABLE IF EXISTS modele_capteur CASCADE;
+DROP TABLE IF EXISTS modele_type_capteur CASCADE;
+DROP TABLE IF EXISTS pompier CASCADE;
+DROP TABLE IF EXISTS pompier_incident CASCADE;
+DROP TABLE IF EXISTS type_capteur CASCADE;
+DROP TABLE IF EXISTS type_incident CASCADE;
+DROP TABLE IF EXISTS vehicule CASCADE;
+DROP TABLE IF EXISTS vehicule_incident CASCADE;
+DROP TABLE IF EXISTS type_produit CASCADE;
+DROP TABLE IF EXISTS vehicule_type_produit CASCADE;
+
+
+
 CREATE TABLE public.capteur (
     id integer NOT NULL,
     code text,
-    latitude numeric(8,0),
-    longitude numeric(8,0),
+    latitude numeric(8,6),
+    longitude numeric(8,6),
     ligne integer,
     colonne integer,
     id_modele integer NOT NULL
@@ -83,8 +102,8 @@ CREATE TABLE public.caserne (
     code_postal text,
     ville text,
     tel text,
-    longitude text,
-    latitude text
+    latitude numeric(8,6),
+    longitude numeric(8,6)
 );
 
 
@@ -110,9 +129,10 @@ ALTER TABLE public.caserne ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 -- Name: detection; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.detection (
+CREATE TABLE detection(
     id_incident integer NOT NULL,
-    id_capteur integer NOT NULL
+    id_capteur integer NOT NULL,
+    id_type_incident integer NOT NULL
 );
 
 
@@ -159,8 +179,8 @@ CREATE TABLE public.incident (
     date_debut timestamp without time zone,
     date_fin timestamp without time zone,
     type text,
-    longitude numeric(8,0),
-    latitude numeric(8,0),
+    latitude numeric(8,6),
+    longitude numeric(8,6),
     criticite integer DEFAULT 1,
     id_type_incident integer
 );
@@ -339,8 +359,8 @@ CREATE TABLE public.vehicule (
     capacite_personne integer,
     capactite_produit numeric,
     type_produit text,
-    longitude numeric(8,0),
-    latitude numeric(8,0),
+    longitude numeric(8,6),
+    latitude numeric(8,6),
     id_caserne integer NOT NULL
 );
 
@@ -380,77 +400,6 @@ ALTER TABLE public.vehicule_incident OWNER TO postgres;
 -- Dependencies: 209
 -- Data for Name: capteur; Type: TABLE DATA; Schema: public; Owner: postgres
 --
-
-INSERT INTO public.capteur VALUES (64, 'Capteur64', 7, 3, 6, 3, 1);
-INSERT INTO public.capteur VALUES (65, 'Capteur65', 7, 4, 6, 4, 1);
-INSERT INTO public.capteur VALUES (31, 'Capteur31', 3, 0, 3, 0, 1);
-INSERT INTO public.capteur VALUES (33, 'Capteur33', 3, 2, 3, 2, 1);
-INSERT INTO public.capteur VALUES (66, 'Capteur66', 7, 6, 6, 5, 1);
-INSERT INTO public.capteur VALUES (1, 'Capteur1', 0, 0, 0, 0, 1);
-INSERT INTO public.capteur VALUES (3, 'Capteur3', 0, 2, 0, 2, 1);
-INSERT INTO public.capteur VALUES (4, 'Capteur4', 0, 3, 0, 3, 1);
-INSERT INTO public.capteur VALUES (5, 'Capteur5', 0, 4, 0, 4, 1);
-INSERT INTO public.capteur VALUES (16, 'Capteur16', 1, 6, 1, 5, 1);
-INSERT INTO public.capteur VALUES (34, 'Capteur34', 3, 3, 3, 3, 1);
-INSERT INTO public.capteur VALUES (36, 'Capteur36', 3, 6, 3, 5, 1);
-INSERT INTO public.capteur VALUES (37, 'Capteur37', 3, 7, 3, 6, 1);
-INSERT INTO public.capteur VALUES (67, 'Capteur67', 7, 7, 6, 6, 1);
-INSERT INTO public.capteur VALUES (6, 'Capteur6', 0, 6, 0, 5, 1);
-INSERT INTO public.capteur VALUES (18, 'Capteur18', 1, 8, 1, 7, 1);
-INSERT INTO public.capteur VALUES (48, 'Capteur48', 4, 8, 4, 7, 1);
-INSERT INTO public.capteur VALUES (49, 'Capteur49', 4, 9, 4, 8, 1);
-INSERT INTO public.capteur VALUES (50, 'Capteur50', 4, 10, 4, 9, 1);
-INSERT INTO public.capteur VALUES (51, 'Capteur51', 6, 0, 5, 0, 1);
-INSERT INTO public.capteur VALUES (52, 'Capteur52', 6, 1, 5, 1, 1);
-INSERT INTO public.capteur VALUES (68, 'Capteur68', 7, 8, 6, 7, 1);
-INSERT INTO public.capteur VALUES (19, 'Capteur19', 1, 9, 1, 8, 1);
-INSERT INTO public.capteur VALUES (38, 'Capteur38', 3, 8, 3, 7, 1);
-INSERT INTO public.capteur VALUES (39, 'Capteur39', 3, 9, 3, 8, 1);
-INSERT INTO public.capteur VALUES (40, 'Capteur40', 3, 10, 3, 9, 1);
-INSERT INTO public.capteur VALUES (69, 'Capteur69', 7, 9, 6, 8, 1);
-INSERT INTO public.capteur VALUES (70, 'Capteur70', 7, 10, 6, 9, 1);
-INSERT INTO public.capteur VALUES (59, 'Capteur59', 6, 9, 5, 8, 1);
-INSERT INTO public.capteur VALUES (10, 'Capteur10', 0, 10, 0, 9, 1);
-INSERT INTO public.capteur VALUES (20, 'Capteur20', 1, 10, 1, 9, 1);
-INSERT INTO public.capteur VALUES (32, 'Capteur32', 3, 1, 3, 1, 1);
-INSERT INTO public.capteur VALUES (25, 'Capteur25', 2, 4, 2, 4, 1);
-INSERT INTO public.capteur VALUES (35, 'Capteur35', 3, 4, 3, 4, 1);
-INSERT INTO public.capteur VALUES (53, 'Capteur53', 6, 2, 5, 2, 1);
-INSERT INTO public.capteur VALUES (54, 'Capteur54', 6, 3, 5, 3, 1);
-INSERT INTO public.capteur VALUES (55, 'Capteur55', 6, 4, 5, 4, 1);
-INSERT INTO public.capteur VALUES (28, 'Capteur28', 2, 8, 2, 7, 1);
-INSERT INTO public.capteur VALUES (17, 'Capteur17', 1, 7, 1, 6, 1);
-INSERT INTO public.capteur VALUES (7, 'Capteur7', 0, 7, 0, 6, 1);
-INSERT INTO public.capteur VALUES (8, 'Capteur8', 0, 8, 0, 7, 1);
-INSERT INTO public.capteur VALUES (9, 'Capteur9', 0, 9, 0, 8, 1);
-INSERT INTO public.capteur VALUES (11, 'Capteur11', 1, 0, 1, 0, 1);
-INSERT INTO public.capteur VALUES (12, 'Capteur12', 1, 1, 1, 1, 1);
-INSERT INTO public.capteur VALUES (13, 'Capteur13', 1, 2, 1, 2, 1);
-INSERT INTO public.capteur VALUES (14, 'Capteur14', 1, 3, 1, 3, 1);
-INSERT INTO public.capteur VALUES (21, 'Capteur21', 2, 0, 2, 0, 1);
-INSERT INTO public.capteur VALUES (22, 'Capteur22', 2, 1, 2, 1, 1);
-INSERT INTO public.capteur VALUES (23, 'Capteur23', 2, 2, 2, 2, 1);
-INSERT INTO public.capteur VALUES (24, 'Capteur24', 2, 3, 2, 3, 1);
-INSERT INTO public.capteur VALUES (26, 'Capteur26', 2, 6, 2, 5, 1);
-INSERT INTO public.capteur VALUES (27, 'Capteur27', 2, 7, 2, 6, 1);
-INSERT INTO public.capteur VALUES (29, 'Capteur29', 2, 9, 2, 8, 1);
-INSERT INTO public.capteur VALUES (30, 'Capteur30', 2, 10, 2, 9, 1);
-INSERT INTO public.capteur VALUES (41, 'Capteur41', 4, 0, 4, 0, 1);
-INSERT INTO public.capteur VALUES (42, 'Capteur42', 4, 1, 4, 1, 1);
-INSERT INTO public.capteur VALUES (43, 'Capteur43', 4, 2, 4, 2, 1);
-INSERT INTO public.capteur VALUES (44, 'Capteur44', 4, 3, 4, 3, 1);
-INSERT INTO public.capteur VALUES (45, 'Capteur45', 4, 4, 4, 4, 1);
-INSERT INTO public.capteur VALUES (46, 'Capteur46', 4, 6, 4, 5, 1);
-INSERT INTO public.capteur VALUES (47, 'Capteur47', 4, 7, 4, 6, 1);
-INSERT INTO public.capteur VALUES (15, 'Capteur15', 1, 4, 1, 4, 1);
-INSERT INTO public.capteur VALUES (56, 'Capteur56', 6, 6, 5, 5, 1);
-INSERT INTO public.capteur VALUES (57, 'Capteur57', 6, 7, 5, 6, 1);
-INSERT INTO public.capteur VALUES (58, 'Capteur58', 6, 8, 5, 7, 1);
-INSERT INTO public.capteur VALUES (60, 'Capteur60', 6, 10, 5, 9, 1);
-INSERT INTO public.capteur VALUES (61, 'Capteur61', 7, 0, 6, 0, 1);
-INSERT INTO public.capteur VALUES (62, 'Capteur62', 7, 1, 6, 1, 1);
-INSERT INTO public.capteur VALUES (63, 'Capteur63', 7, 2, 6, 2, 1);
-INSERT INTO public.capteur VALUES (2, 'Capteur2', 0, 1, 0, 1, 1);
 
 
 --
@@ -499,7 +448,6 @@ INSERT INTO public.capteur VALUES (2, 'Capteur2', 0, 1, 0, 1, 1);
 -- Data for Name: modele_capteur; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.modele_capteur OVERRIDING SYSTEM VALUE VALUES (1, 'Microbit feu');
 
 
 --
@@ -869,6 +817,9 @@ CREATE INDEX fki_fk_vehicule ON public.vehicule_incident USING btree (id_vehicul
 ALTER TABLE ONLY public.detection
     ADD CONSTRAINT fk_capteur FOREIGN KEY (id_capteur) REFERENCES public.capteur(id);
 
+ALTER TABLE ONLY public.detection
+    ADD CONSTRAINT fk_type_incident FOREIGN KEY (id_type_incident) REFERENCES public.type_incident(id);
+
 
 --
 -- TOC entry 3280 (class 2606 OID 16709)
@@ -1002,3 +953,21 @@ ALTER TABLE ONLY public.vehicule_incident
 -- PostgreSQL database dump complete
 --
 
+
+CREATE TABLE public.type_produit (
+    id SERIAL NOT NULL PRIMARY KEY,
+    libelle text NOT NULL
+);
+
+
+CREATE TABLE public.vehicule_type_produit(
+    id_vehicule integer not NULL,
+    id_type_produit integer not NULL
+);
+
+ALTER TABLE ONLY public.vehicule_type_produit
+    ADD CONSTRAINT fk_vehicule FOREIGN KEY (id_vehicule) REFERENCES public.vehicule(id);
+
+    
+ALTER TABLE ONLY public.vehicule_type_produit
+    ADD CONSTRAINT fk_type_produit FOREIGN KEY (id_type_produit) REFERENCES public.id_type_produit(id);

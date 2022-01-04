@@ -14,7 +14,6 @@
         <thead>
           <tr>
             <th>Libellé</th>
-            <th>Modèles</th>
           </tr>
         </thead>
         <tbody>
@@ -36,13 +35,6 @@
                   <span class="fa fa-trash"></span>
                 </button>
               </div>
-            </td>
-            <td>
-                <ul>
-                  <li v-for="(modele, index) in element.modeles" :key="index">
-                    {{ modele.libelle }}
-                  </li>
-                </ul>
             </td>
           </tr>
         </tbody>

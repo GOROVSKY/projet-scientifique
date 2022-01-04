@@ -267,8 +267,8 @@ def delete_modele_capteur(id):
 @app.route('/api/capteur/<id>', methods=['GET'])
 def get_capteur(id=None):
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    query = "SELECT c.id, c.id_modele_capteur, c.code, c.latitude, c.longitude, c.ligne, c.colonne, mc.libelle FROM capteur c "
-    query += "LEFT JOIN modele_capteur mc ON c.id_modele_capteur = mc.id"
+    query = "SELECT c.id, c.id_modele, c.code, c.latitude, c.longitude, c.ligne, c.colonne, mc.libelle FROM capteur c "
+    query += "LEFT JOIN modele_capteur mc ON c.id_modele = mc.id"
 
     if id is not None:
         query += f" WHERE c.id = {id}"
@@ -280,11 +280,11 @@ def get_capteur(id=None):
     for row in rows:
         d = collections.OrderedDict()
         d["id"] = int(row["id"])
-        d["modeleId"] = int(row["id_modele_capteur"])
+        d["modeleId"] = int(row["id_modele"])
         d["modeleLibelle"] = row["libelle"]
         d["code"] = row["code"]
-        d["latitude"] = int(row["latitude"])
-        d["longitude"] = int(row["longitude"])
+        d["latitude"] = float(row["latitude"])
+        d["longitude"] = float(row["longitude"])
         d["ligne"] = row["ligne"]
         d["colonne"] = row["colonne"]
         objects_list.append(d)
@@ -298,7 +298,7 @@ def post_capteur():
     if element.get("id") is None:
         abort(422)
 
-    requete = "UPDATE capteur SET code = %s, latitude = %s, longitude = %s, id_modele_capteur = %s WHERE id = %s"
+    requete = "UPDATE capteur SET code = %s, latitude = %s, longitude = %s, id_modele = %s WHERE id = %s"
     values = (element["code"], element["latitude"],
               element["longitude"], element["modeleId"], element["id"])
 
@@ -316,7 +316,7 @@ def put_capteur():
     if element.get("code") is None or element.get("latitude") is None or element.get("longitude") is None or element.get("modeleId") is None:
         abort(422)
 
-    requete = "INSERT INTO capteur (code, latitude, longitude, id_modele_capteur) VALUES (%s, %s, %s, %s)"
+    requete = "INSERT INTO capteur (code, latitude, longitude, id_model) VALUES (%s, %s, %s, %s)"
     values = (element["code"], element["latitude"],
               element["longitude"], element["modeleId"])
 
@@ -366,8 +366,8 @@ def get_vehicule(id=None):
         d["capacite_produit"] = int(row["capacite_produit"])
         d["type_produit"] = row["type_produit"]
         d["longitude"] = row["longitude"]
-        d["latitude"] = row["latitude"]
-        d["caserne_id"] = row["id_caserne"]
+        d["latitude"] = float(row["latitude"])
+        d["caserne_id"] = float(row["id_caserne"])
         d["caserne_nom"] = row["nom"]
         objects_list.append(d)
     return jsonify(objects_list)
@@ -380,9 +380,20 @@ def post_vehicule():
     if element.get("id") is None:
         abort(422)
 
-    requete = "UPDATE vehicule SET modele = %s, num_immatriculation = %s, capacite_personne = %s, capacite_produit = %s, longitude = %s, latitude = %s, id_caserne = %s WHERE id = %s"
-    values = (element["modele"], element["num_immatriculation"], element["capacite_personne"],
-              element["capacite_produit"], element["longitude"], element["latitude"], element["caserne_id"], element["id"])
+    # requete = "UPDATE vehicule SET modele = %s, num_immatriculation = %s, capacite_personne = %s, capacite_produit = %s, longitude = %s, latitude = %s, id_caserne = %s"
+    requete = "UPDATE vehicule SET id = %s"
+    values = (element.get("id"),)
+    if element.get("latitude") is not None:
+        requete += ", latitude = %s "
+        values += element.get("latitude"),
+    if element.get("longitude") is not None:
+        requete += ", longitude = %s "
+        values += element.get("longitude"),
+    requete += "WHERE id = %s"
+    values += element.get("id"),
+    
+    # values = (element["modele"], element["num_immatriculation"], element["capacite_personne"],
+    #           element["capacite_produit"], element["longitude"], element["latitude"], element["caserne_id"], element["id"])
 
     cur = conn.cursor()
     cur.execute(requete, values)
@@ -581,3 +592,30 @@ def delete_pompier(id):
     conn.commit()
 
     return "", 200
+
+##### INCIDENT #####
+@app.route('/api/incident', methods=['GET'])
+@app.route('/api/incident/<id>', methods=['GET'])
+def get_incident(id=None):
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = "SELECT * FROM incident "
+    query += "WHERE date_fin IS NULL " 
+
+    if id is not None:
+        query += f"AND v.id = {id}"
+
+    cur.execute(query)
+    rows = cur.fetchall()
+
+    objects_list = []
+    for row in rows:
+        d = collections.OrderedDict()
+        d["id"] = int(row["id"])
+        d["date_debut"] = row["date_debut"]
+        d["date_fin"] = row["date_fin"]
+        d["type"] = row["type"]
+        d["criticite"] = int(row["criticite"])
+        d["longitude"] = row["longitude"]
+        d["latitude"] = float(row["latitude"])
+        objects_list.append(d)
+    return jsonify(objects_list)
