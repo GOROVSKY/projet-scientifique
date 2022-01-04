@@ -5,32 +5,32 @@
     </div>
     <div class="contenu">
       <div>
-        <label>Nom</label>
-        <input v-model="element.nom" class="form-control" />
+        <label>Num immatriculation</label>
+        <input v-model="element.num_immatriculation" class="form-control" />
       </div>
       <div>
-        <label>Prénom</label>
-        <input v-model="element.prénom" class="form-control" />
+        <label>Modèle</label>
+        <input v-model="element.modele" class="form-control" />
       </div>
       <div>
-        <label>Age</label>
-        <input v-model="element.age" class="form-control" />
+        <label>Capacité personne</label>
+        <input v-model="element.capacite_personne" type="number" class="form-control" />
       </div>
       <div>
-        <label>Téléphone</label>
-        <input v-model="element.tel" class="form-control" />
+        <label>Capacité produit</label>
+        <input v-model="element.capacite_produit" class="form-control" />
       </div>
       <div>
-        <label>Energie</label>
-        <input v-model="element.energie" class="form-control" />
+        <label>Longitude</label>
+        <input v-model="element.longitude" class="form-control" />
       </div>
       <div>
-        <label>Annee d'expérience</label>
-        <input v-model="element.anneeExperience" class="form-control" />
+        <label>Latitude</label>
+        <input v-model="element.latitude" class="form-control" />
       </div>
       <div>
         <label>Casernes</label>
-        <select v-model="element.caserneId">
+        <select v-model="element.caserne_id">
           <option v-for="(element, index) in casernes" :key="index" :value="element.id">{{ element.nom }}</option>
         </select>
       </div>

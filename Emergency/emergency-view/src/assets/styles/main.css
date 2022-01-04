@@ -6,7 +6,8 @@ table {
   background-color: rgb(64, 141, 228) !important;
   color: white !important;
 }
-tr, th, td {
+
+td {
   position: relative;
 }
 

@@ -12,11 +12,15 @@
       </div>
       <div>
         <label>Code postal</label>
-        <input v-model="element.codePostal" class="form-control" required />
+        <input v-model="element.code_postal" class="form-control" required />
       </div>
       <div>
         <label>Ville</label>
         <input v-model="element.ville" class="form-control" required />
+      </div>
+      <div>
+        <label>Tel</label>
+        <input v-model="element.tel" type="tel" class="form-control" pattern="[0-9]{10}" required />
       </div>
       <div>
         <label>Longitude</label>

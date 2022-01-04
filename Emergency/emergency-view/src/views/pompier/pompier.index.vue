@@ -38,8 +38,8 @@
             <td>{{ element.age }}</td>
             <td>{{ element.tel }}</td>
             <td>{{ element.energie }}</td>
-            <td>{{ element.anneeExperience }}</td>
-            <td>{{ element.caserneNom }}</td>
+            <td>{{ element.annees_experience }}</td>
+            <td>{{ element.caserne_nom }}</td>
           </tr>
         </tbody>
       </table>

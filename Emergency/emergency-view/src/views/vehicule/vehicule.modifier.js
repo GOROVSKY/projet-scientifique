@@ -23,9 +23,10 @@ export default {
         },
 
         recupererCasernes() {
-            api.recuperer("caserne")
+            return api.recuperer("caserne")
                 .then(result => {
                     this.casernes = result.data;
+                    this.element.caserne_id = this.casernes[0]?.id;
                 })
         },
 
@@ -54,8 +55,10 @@ export default {
     },
 
     created() {
-        if (this.id) {
-            this.recupererElement();
-        }
+        this.recupererCasernes().then(() => {
+            if (this.id) {
+                this.recupererElement();
+            }
+        })
     }
 }

@@ -11,20 +11,7 @@ export default {
 
     data() {
         return {
-            liste: [
-                {
-                    numImmatriculation: "ZE-568-ZD",
-                    modele: "Tesla",
-                    capacitePersonne: 5,
-                    capaciteProduit: 10,
-                    produits: [
-                        { libelle: "Eau"}
-                    ],
-                    longitude: 56.325659,
-                    latitude: 56.325659,
-                    caserneNom: 'Caserne de Lyon',
-                }
-            ],
+            liste: [],
             afficherModale: false,
             elementSelectionne: null
         }
@@ -32,10 +19,10 @@ export default {
 
     methods: {
         recupererListe() {
-            // api.recuperer("vehicule")
-            //     .then(result => {
-            //         this.liste = result.data;
-            //     })
+            api.recuperer("vehicule")
+                .then(result => {
+                    this.liste = result.data;
+                })
         },
 
         ajouter() {

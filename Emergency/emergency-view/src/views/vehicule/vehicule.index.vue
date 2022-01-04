@@ -17,7 +17,6 @@
             <th>Modèle</th>
             <th>Capacité de personnes</th>
             <th>Capacité de produit</th>
-            <th>Produits</th>
             <th>Caserne</th>
             <th>Longitude</th>
             <th>Latitude</th>
@@ -25,7 +24,7 @@
         </thead>
         <tbody>
           <tr v-for="(element, index) in liste" :key="index" class="show-overlay">
-            <td>{{ element.numImmatriculation }}
+            <td>{{ element.num_immatriculation }}
               <div class="overlay">
                 <button class="btn btn-sm btn-edit" @click="modifier(element)">
                   <span class="fa fa-edit"></span>
@@ -36,14 +35,9 @@
               </div>
             </td>
             <td>{{ element.modele }}</td>
-            <td>{{ element.capacitePersonne }}</td>
-            <td>{{ element.capaciteProduit }}</td>
-            <td>
-              <ul>
-                <li v-for="(produit, index) in element.produits" :key="index">{{ produit.libelle }}</li>
-              </ul>
-            </td>
-            <td>{{ element.caserneNom }}</td>
+            <td>{{ element.capacite_personne }}</td>
+            <td>{{ element.capacite_produit }}</td>
+            <td>{{ element.caserne_nom }}</td>
             <td>{{ element.longitude }}</td>
             <td>{{ element.latitude }}</td>
           </tr>
