@@ -1,6 +1,6 @@
 <template>
   <Header />
-  <router-view />
+  <router-view id="main-router-view" />
 </template>
 
 <script src="./App.js"></script>

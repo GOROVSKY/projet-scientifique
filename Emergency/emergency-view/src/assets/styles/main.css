@@ -1,3 +1,7 @@
+html, body, #app {
+  height: 100%;
+}
+
 table {
   width: 100%;
 }
@@ -43,6 +47,8 @@ td, th {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  display: flex;
+  flex-direction: column;
 }
 
 #nav {
@@ -57,4 +63,8 @@ td, th {
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+
+#main-router-view {
+  flex-grow: 1;
 }
