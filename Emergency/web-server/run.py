@@ -146,6 +146,23 @@ def delete_type_capteur(id):
     return "", 200
 
 
+# ##### MODELE_TYPE_CAPTEUR #####
+@app.route('/api/modeleTypeCapteur', methods=['PUT'])
+def put_modele_type_capteur():
+
+    element = request.json
+    if element.get("id_modele_capteur") is None or element.get("id_type_capteur") is None:
+        abort(422)
+
+    requete = "INSERT INTO modele_type_capteur (id_modele_capteur, id_type_capteur) VALUES (%s, %s)"
+    values = (element["id_modele_capteur"], element["id_type_capteur"])
+
+    cur = conn.cursor()
+    cur.execute(requete, values)
+    conn.commit()
+
+    return "", 201
+
 ##### MODELE_CAPTEUR #####
 @app.route('/api/modeleCapteur', methods=['GET'])
 @app.route('/api/modeleCapteur/<id>', methods=['GET'])
@@ -159,11 +176,25 @@ def get_modele_capteur(id=None):
     cur.execute(query)
     rows = cur.fetchall()
 
+    qryModeleType = "SELECT id_modele_capteur, id_type_capteur, libelle FROM modele_type_capteur mtc JOIN type_capteur tc ON mtc.id_type_capteur = tc.id"
+    if id is not None:
+        qryModeleType += f" WHERE id_modele_capteur = {id}"
+    cur.execute(qryModeleType)
+    mtc = cur.fetchall()
+
     objects_list = []
     for row in rows:
         d = collections.OrderedDict()
         d["id"] = int(row["id"])
         d["libelle"] = row["libelle"]
+
+        # Ajout des libellés des types de capteur
+        d["types_capteur"] = []
+        tmp = list(filter(lambda x: x[0] == row["id"], mtc))
+        for i in tmp:
+            dico = { 'libelle' : i[2] }
+            d["types_capteur"].append(dico.copy())
+        
         objects_list.append(d)
     return jsonify(objects_list)
 
