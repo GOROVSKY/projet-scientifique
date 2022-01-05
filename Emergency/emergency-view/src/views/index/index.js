@@ -15,7 +15,8 @@ export default {
             markersVehicules: [],
             markersCasernes: [],
             markersIncidents: [],
-            direction: 0.0004
+            direction: 0.0004,
+            interval: null
         }
     },
 
@@ -183,7 +184,7 @@ export default {
             this.afficherIncidents();
         })
 
-        setInterval(() => {
+        this.interval = setInterval(() => {
             this.recupererVehicules().then(() => {
                 this.afficherVehicules();
                 this.deplacerVehicule();
@@ -192,5 +193,9 @@ export default {
                 this.afficherIncidents();
             })
         }, 3000);
+    },
+
+    beforeUnmount() {
+        clearInterval(this.interval);
     }
 }

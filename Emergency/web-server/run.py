@@ -347,7 +347,7 @@ def delete_capteur(id):
 @app.route('/api/vehicule/<id>', methods=['GET'])
 def get_vehicule(id=None):
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    query = "SELECT v.id, v.modele, v.num_immatriculation, v.capacite_personne, v.capacite_produit, v.type_produit, v.longitude, v.latitude, v.id_caserne, c.nom FROM vehicule v "
+    query = "SELECT v.id, v.modele, v.num_immatriculation, v.capacite_personne, v.capacite_produit, v.longitude, v.latitude, v.id_caserne, c.nom FROM vehicule v "
     query += "LEFT JOIN caserne c ON v.id_caserne = c.id"
 
     if id is not None:
@@ -364,7 +364,6 @@ def get_vehicule(id=None):
         d["num_immatriculation"] = row["num_immatriculation"]
         d["capacite_personne"] = int(row["capacite_personne"])
         d["capacite_produit"] = int(row["capacite_produit"])
-        d["type_produit"] = row["type_produit"]
         d["longitude"] = row["longitude"]
         d["latitude"] = float(row["latitude"])
         d["caserne_id"] = float(row["id_caserne"])
@@ -377,18 +376,23 @@ def get_vehicule(id=None):
 def post_vehicule():
 
     element = request.json
-    if element.get("id") is None:
+    if element.get("id") is None or (element.get("latitude") is not None and element.get("longitude") is not None):
         abort(422)
 
     # requete = "UPDATE vehicule SET modele = %s, num_immatriculation = %s, capacite_personne = %s, capacite_produit = %s, longitude = %s, latitude = %s, id_caserne = %s"
-    requete = "UPDATE vehicule SET id = %s"
-    values = (element.get("id"),)
+    requete = "UPDATE vehicule SET "
+    values = ()
     if element.get("latitude") is not None:
-        requete += ", latitude = %s "
+        requete += "latitude = %s, "
         values += element.get("latitude"),
     if element.get("longitude") is not None:
-        requete += ", longitude = %s "
+        requete += "longitude = %s, "
         values += element.get("longitude"),
+
+    #Suppression dernière virgule
+    tmp = list(requete)
+    tmp[len(tmp) - 2] = ''
+    requete = "".join(tmp)
     requete += "WHERE id = %s"
     values += element.get("id"),
     
