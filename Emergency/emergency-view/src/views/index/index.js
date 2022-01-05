@@ -16,7 +16,30 @@ export default {
             markersCasernes: [],
             markersIncidents: [],
             direction: 0.0004,
-            interval: null
+            interval: null,
+            affichageCaserne: true,
+            affichageVehicule: true,
+            affichageIncident: true
+        }
+    },
+
+    watch: {
+        affichageCaserne: {
+            handler() {
+                this.afficherCasernes();
+            }
+        },
+
+        affichageVehicule: {
+            handler() {
+                this.afficherVehicules();
+            }
+        },
+
+        affichageIncident: {
+            handler() {
+                this.afficherIncidents();
+            }
         }
     },
 
@@ -59,7 +82,7 @@ export default {
                 })
         },
 
-        afficherVehicules() {
+        ajouterVehicules() {
             //On supprime toutes les bornes
             this.markersVehicules.forEach(x => {
                 this.carte.removeLayer(x);
@@ -88,11 +111,11 @@ export default {
                 marker.bindPopup(chaineInfo)
 
                 this.markersVehicules.push(marker);
-                this.carte.addLayer(marker);
+                this.afficherVehicules();
             });
         },
 
-        afficherCasernes() {
+        ajouterCasernes() {
             //On supprime tous les markers
             this.markersCasernes.forEach(x => {
                 this.carte.removeLayer(x);
@@ -121,11 +144,11 @@ export default {
                 marker.bindPopup(chaineInfo)
 
                 this.markersCasernes.push(marker);
-                this.carte.addLayer(marker);
+                this.afficherCasernes();
             });
         },
 
-        afficherIncidents() {
+        ajouterIncidents() {
             //On supprime tous les markers
             this.markersIncidents.forEach(x => {
                 this.carte.removeLayer(x);
@@ -154,7 +177,7 @@ export default {
                 marker.bindPopup(chaineInfo)
 
                 this.markersIncidents.push(marker);
-                this.carte.addLayer(marker);
+                this.afficherIncidents();
             });
         },
 
@@ -167,30 +190,60 @@ export default {
             return api.mettreAJour("vehicule", { id: this.vehicules[0]?.id, latitude: latitude })
                 .then(() => { })
         },
+
+        afficherCasernes() {
+            this.markersCasernes.forEach(x => {
+                if (this.affichageCaserne) {
+                    this.carte.addLayer(x)
+                } else {
+                    this.carte.removeLayer(x)
+                }
+            })
+        },
+
+        afficherVehicules() {
+            this.markersVehicules.forEach(x => {
+                if (this.affichageVehicule) {
+                    this.carte.addLayer(x)
+                } else {
+                    this.carte.removeLayer(x)
+                }
+            })
+        },
+
+        afficherIncidents() {
+            this.markersIncidents.forEach(x => {
+                if (this.affichageIncident) {
+                    this.carte.addLayer(x)
+                } else {
+                    this.carte.removeLayer(x)
+                }
+            })
+        }
     },
 
     mounted() {
         this.creerCarte();
         this.recupererCasernes().then(() => {
-            this.afficherCasernes();
+            this.ajouterCasernes();
         })
 
         this.recupererVehicules().then(() => {
-            this.afficherVehicules();
+            this.ajouterVehicules();
             this.deplacerVehicule();
         })
 
         this.recupererIncidents().then(() => {
-            this.afficherIncidents();
+            this.ajouterIncidents();
         })
 
         this.interval = setInterval(() => {
             this.recupererVehicules().then(() => {
-                this.afficherVehicules();
+                this.ajouterVehicules();
                 this.deplacerVehicule();
             })
             this.recupererIncidents().then(() => {
-                this.afficherIncidents();
+                this.ajouterIncidents();
             })
         }, 3000);
     },

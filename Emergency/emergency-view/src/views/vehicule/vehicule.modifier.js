@@ -26,7 +26,7 @@ export default {
             return api.recuperer("caserne")
                 .then(result => {
                     this.casernes = result.data;
-                    this.element.caserne_id = this.casernes[0]?.id;
+                    this.element.id_caserne = this.casernes[0]?.id;
                 })
         },
 

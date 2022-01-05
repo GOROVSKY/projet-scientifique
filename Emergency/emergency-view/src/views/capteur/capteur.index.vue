@@ -1,24 +1,29 @@
 <template>
-  <div>
+  <div class="content-scroll">
     <CapteurModifier
       v-if="afficherModale"
       :id="elementSelectionne?.id"
       @valider="fermerModale()"
     />
-    <h1>Capteurs</h1>
-    <div class="m-2">
-      <button class="btn btn-success" @click="ajouter()">+ Ajouter</button>
-    </div>
-    <div class="content-scroll">
-      <table class="table-bordered table-hover table-stripped">
+    <div class="content-header">
+      <h1>Capteurs</h1>
+      <div class="m-2">
+        <button class="btn btn-success" @click="ajouter()">+ Ajouter</button>
+      </div>
+
+      <table class="table-bordered table-hover">
         <thead>
-          <tr>
-            <th>Code</th>
-            <th>Latitude</th>
-            <th>Longitude</th>
-            <th>Modèle</th>
+          <tr class="d-flex">
+            <th style="flex-basis: 25%">Code</th>
+            <th style="flex-basis: 25%">Latitude</th>
+            <th style="flex-basis: 25%">Longitude</th>
+            <th style="flex-basis: 25%">Modèle</th>
           </tr>
         </thead>
+      </table>
+    </div>
+    <div class="content-body">
+      <table class="table-bordered table-hover table-stripped table-sm">
         <tbody>
           <tr
             v-for="(element, index) in liste"
@@ -43,17 +48,13 @@
             <td>{{ element.longitude }}</td>
             <td>
               {{ element.modeleLibelle }}
-              <div>
-                <ul>
-                  <li v-for="(type, index) in element.modeleTypes" :key="index">
-                    {{ type.libelle }}
-                  </li>
-                </ul>
-              </div>
             </td>
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class="content-footer">
+      <h4>{{ liste.length }} capteurs</h4>
     </div>
   </div>
 </template>

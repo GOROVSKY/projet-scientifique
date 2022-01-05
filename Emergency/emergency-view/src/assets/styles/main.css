@@ -51,9 +51,13 @@ td, th {
   flex-direction: column;
 }
 
+.header {
+  background-color: #4e4e4e;
+  color: #f5f5f5;
+}
+
 #nav {
   padding: 30px;
-  background-color: #4e4e4e;
 }
 
 #nav a {
@@ -67,4 +71,23 @@ td, th {
 
 #main-router-view {
   flex-grow: 1;
+  overflow: hidden;
+}
+
+.content-scroll {
+  display: flex;
+  flex-direction: column;
+}
+
+.content-header {
+
+}
+
+.content-body {
+  overflow: auto;
+  flex-grow: 1;
+}
+
+.content-footer {
+  border-top: 1px solid black;
 }

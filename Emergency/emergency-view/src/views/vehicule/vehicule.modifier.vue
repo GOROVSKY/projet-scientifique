@@ -30,7 +30,7 @@
       </div>
       <div>
         <label>Casernes</label>
-        <select v-model="element.caserne_id">
+        <select v-model="element.id_caserne">
           <option v-for="(element, index) in casernes" :key="index" :value="element.id">{{ element.nom }}</option>
         </select>
       </div>
