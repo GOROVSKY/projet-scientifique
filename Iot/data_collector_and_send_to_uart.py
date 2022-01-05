@@ -10,7 +10,7 @@ import json
 SERIALPORT = "/dev/ttyS5"
 BAUDRATE = 115200
 ser = serial.Serial()
-IP_HOST = "192.168.0.28"
+IP_HOST = "127.0.0.1"
 value_dict= dict()
 
 

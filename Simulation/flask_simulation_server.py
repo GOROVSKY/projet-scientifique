@@ -48,8 +48,8 @@ def api_sensors():
             d["code"] = row['code']
             d["latitude"] = int(row['latitude'])
             d["longitude"] = int(row['longitude'])
-            d["row"] = int(row['row'])
-            d["column"] = int(row['column'])
+            #d["row"] = int(row['row'])
+            #d["column"] = int(row['column'])
             if row[6]:
                 d["value"] = int(row['value'])
             else :
