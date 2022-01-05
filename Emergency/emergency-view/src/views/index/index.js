@@ -1,5 +1,6 @@
 import api from '@/api/api.js'
 import L from 'leaflet'
+import moment from 'moment'
 
 export default {
     name: 'Index',
@@ -96,9 +97,9 @@ export default {
                 var options = {
                     draggable: false,
                     icon: new L.Icon({
-                        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+                        iconUrl: require('@/assets/images/vehicule.png'),
                         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                        iconSize: [25, 41],
+                        iconSize: [40, 40],
                         iconAnchor: [12, 41],
                         popupAnchor: [1, -34],
                         shadowSize: [41, 41]
@@ -108,6 +109,7 @@ export default {
                 var marker = L.marker(latlng, options);
                
                 var chaineInfo =  `<div style="font-size: 20px">${element.modele} <i>${element.num_immatriculation}</i></div><div>Longitude : <i>${element.longitude}</i></div><div>Latitude : <i>${element.latitude}</i></div>`
+                chaineInfo += `<div>Caserne : ${element.caserne_nom}</div>`
                 marker.bindPopup(chaineInfo)
 
                 this.markersVehicules.push(marker);
@@ -129,9 +131,9 @@ export default {
                 var options = {
                     draggable: false,
                     icon: new L.Icon({
-                        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+                        iconUrl: require('@/assets/images/caserne.png'),
                         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                        iconSize: [25, 41],
+                        iconSize: [40, 40],
                         iconAnchor: [12, 41],
                         popupAnchor: [1, -34],
                         shadowSize: [41, 41]
@@ -162,18 +164,18 @@ export default {
                 var options = {
                     draggable: false,
                     icon: new L.Icon({
-                        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                        iconUrl: require('@/assets/images/incident.png'),
                         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                        iconSize: [25, 41],
-                        iconAnchor: [12, 41],
+                        iconSize: [40, 40],
+                        iconAnchor: [0, 0],
                         popupAnchor: [1, -34],
-                        shadowSize: [41, 41]
+                        shadowSize: [25, 25]
                     })
                 }
 
                 var marker = L.marker(latlng, options);
 
-                var chaineInfo = `<div style="font-size: 20px">Date de début : ${element.date_debut}</div><div>Longitude : <i>${element.longitude}</i></div><div>Latitude : <i>${element.latitude}</i></div>`
+                var chaineInfo = `<div style="font-size: 20px">Date de début : ${moment(element.date_debut).format("HH[h] mm[min]")}</div><div>Longitude : <i>${element.longitude}</i></div><div>Latitude : <i>${element.latitude}</i></div>`
                 marker.bindPopup(chaineInfo)
 
                 this.markersIncidents.push(marker);

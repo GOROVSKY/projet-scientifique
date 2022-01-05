@@ -6,20 +6,22 @@
       @valider="fermerModale()"
     />
     <div class="content-header">
-      <h1>Types</h1>
-      <div class="m-2">
+      <h1>
+        Types
         <button class="btn btn-success" @click="ajouter()">
           <span class="fa fa-plus"></span> Ajouter
         </button>
-      </div>
-    </div>
-    <div class="content-body">
-      <table class="table-bordered table-hover table-stripped">
+      </h1>
+      <table class="table table-bordered">
         <thead>
           <tr>
             <th>Libellé</th>
           </tr>
         </thead>
+      </table>
+    </div>
+    <div class="content-body">
+      <table class="table table-bordered table-hover table-striped">
         <tbody>
           <tr
             v-for="(element, index) in liste"
