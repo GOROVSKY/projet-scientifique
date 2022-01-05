@@ -10,27 +10,27 @@
       </div>
       <div>
         <label>Prénom</label>
-        <input v-model="element.prénom" class="form-control" />
+        <input v-model="element.prenom" class="form-control" />
       </div>
       <div>
         <label>Age</label>
-        <input v-model="element.age" class="form-control" />
+        <input v-model="element.age" type="number" class="form-control" />
       </div>
       <div>
         <label>Téléphone</label>
-        <input v-model="element.tel" class="form-control" />
+        <input v-model="element.tel" type="tel" pattern="[0-9]{10}" class="form-control" />
       </div>
       <div>
         <label>Energie</label>
-        <input v-model="element.energie" class="form-control" />
+        <input v-model="element.energie" type="number" class="form-control" />
       </div>
       <div>
         <label>Annee d'expérience</label>
-        <input v-model="element.anneeExperience" class="form-control" />
+        <input v-model="element.annees_experience" type="number" class="form-control" />
       </div>
       <div>
         <label>Casernes</label>
-        <select v-model="element.caserneId">
+        <select v-model="element.caserne_id">
           <option v-for="(element, index) in casernes" :key="index" :value="element.id">{{ element.nom }}</option>
         </select>
       </div>

@@ -17,6 +17,7 @@
             <th>Adresse</th>
             <th>Code postal</th>
             <th>Ville</th>
+            <th>Tel</th>
             <th>Longitude</th>
             <th>Latitude</th>
           </tr>
@@ -34,8 +35,9 @@
               </div>
             </td>
             <td>{{ element.adresse }}</td>
-            <td>{{ element.codePostal }}</td>
+            <td>{{ element.code_postal }}</td>
             <td>{{ element.ville }}</td>
+            <td>{{ element.tel }}</td>
             <td>{{ element.longitude }}</td>
             <td>{{ element.latitude }}</td>
           </tr>

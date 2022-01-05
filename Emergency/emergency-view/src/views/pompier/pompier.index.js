@@ -11,16 +11,7 @@ export default {
 
     data() {
         return {
-            liste: [
-                {
-                    nom: "DUPONT",
-                    prenom: "Jean",
-                    age: 21,
-                    tel: "06 18 25 33 05",
-                    energie: "90%",
-                    caserneNom: 'Caserne de Lyon',
-                }
-            ],
+            liste: [],
             afficherModale: false,
             elementSelectionne: null
         }
@@ -28,10 +19,10 @@ export default {
 
     methods: {
         recupererListe() {
-            // api.recuperer("pompier")
-            //     .then(result => {
-            //         this.liste = result.data;
-            //     })
+            api.recuperer("pompier")
+                .then(result => {
+                    this.liste = result.data;
+                })
         },
 
         ajouter() {

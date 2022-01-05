@@ -21,6 +21,21 @@ const routes = [
     path: '/vehicule',
     name: 'Vehicule',
     component: () => import('../views/vehicule/vehicule.index.vue')
+  },
+  {
+    path: '/capteur',
+    name: 'capteur',
+    component: () => import('../views/capteur/capteur.index.vue')
+  },
+  {
+    path: '/capteurModele',
+    name: 'capteurModele',
+    component: () => import('../views/capteurModele/capteurModele.index.vue')
+  },
+  {
+    path: '/capteurType',
+    name: 'capteurType',
+    component: () => import('../views/capteurType/capteurType.index.vue')
   }
 ]
 
