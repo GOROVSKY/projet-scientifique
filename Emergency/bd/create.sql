@@ -135,7 +135,6 @@ CREATE TABLE public.incident (
     id integer NOT NULL,
     date_debut timestamp without time zone,
     date_fin timestamp without time zone,
-    type text,
     latitude numeric(8,6),
     longitude numeric(8,6),
     criticite integer DEFAULT 1,
@@ -205,7 +204,9 @@ ALTER TABLE public.pompier ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 CREATE TABLE public.pompier_incident (
     id_pompier integer NOT NULL,
-    id_incident integer NOT NULL
+    id_incident integer NOT NULL,
+    date_debut timestamp without time zone,
+    date_fin timestamp without time zone
 );
 
 ALTER TABLE public.pompier_incident OWNER TO postgres;
@@ -271,7 +272,9 @@ ALTER TABLE public.vehicule ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 CREATE TABLE public.vehicule_incident (
     id_vehicule integer NOT NULL,
-    id_incident integer NOT NULL
+    id_incident integer NOT NULL,
+    date_debut timestamp without time zone,
+    date_fin timestamp without time zone
 );
 
 ALTER TABLE public.vehicule_incident OWNER TO postgres;

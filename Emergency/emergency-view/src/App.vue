@@ -1,6 +1,9 @@
 <template>
   <Header />
-  <router-view id="main-router-view" />
+  <div class="d-flex h-100">
+    <Menu />
+    <router-view id="main-router-view" />
+  </div>
 </template>
 
 <script src="./App.js"></script>

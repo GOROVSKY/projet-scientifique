@@ -6,31 +6,33 @@
       @valider="fermerModale()"
     />
     <div class="content-header">
-      <h1>Casernes</h1>
-      <div class="m-2">
-        <button class="btn btn-success" @click="ajouter()">+ Ajouter</button>
-      </div>
-    </div>
-    <div class="content-body">
-      <table class="table-bordered table-hover table-stripped">
+      <h1>Casernes <button class="btn btn-success" @click="ajouter()">+ Ajouter</button></h1>
+        
+  
+
+      <table class="table table-bordered">
         <thead>
-          <tr>
-            <th>Nom</th>
-            <th>Adresse</th>
-            <th>Code postal</th>
-            <th>Ville</th>
-            <th>Tel</th>
-            <th>Longitude</th>
-            <th>Latitude</th>
+          <tr class="d-flex">
+            <th style="flex-basis: 16%">Nom</th>
+            <th style="flex-basis: 15%">Adresse</th>
+            <th style="flex-basis: 12%">Code postal</th>
+            <th style="flex-basis: 15%">Ville</th>
+            <th style="flex-basis: 12%">Tel</th>
+            <th style="flex-basis: 15%">Longitude</th>
+            <th style="flex-basis: 15%">Latitude</th>
           </tr>
         </thead>
+      </table>
+    </div>
+    <div class="content-body">
+      <table class="table table-bordered table-hover table-striped">
         <tbody>
           <tr
             v-for="(element, index) in liste"
             :key="index"
-            class="show-overlay"
+            class="d-flex show-overlay"
           >
-            <td>
+            <td style="flex-basis: 16%">
               {{ element.nom }}
               <div class="overlay">
                 <button class="btn btn-sm btn-edit" @click="modifier(element)">
@@ -44,12 +46,12 @@
                 </button>
               </div>
             </td>
-            <td>{{ element.adresse }}</td>
-            <td>{{ element.code_postal }}</td>
-            <td>{{ element.ville }}</td>
-            <td>{{ element.tel }}</td>
-            <td>{{ element.longitude }}</td>
-            <td>{{ element.latitude }}</td>
+            <td style="flex-basis: 15%">{{ element.adresse }}</td>
+            <td style="flex-basis: 12%">{{ element.code_postal }}</td>
+            <td style="flex-basis: 15%">{{ element.ville }}</td>
+            <td style="flex-basis: 12%">{{ element.tel }}</td>
+            <td style="flex-basis: 15%">{{ element.longitude }}</td>
+            <td style="flex-basis: 15%">{{ element.latitude }}</td>
           </tr>
         </tbody>
       </table>

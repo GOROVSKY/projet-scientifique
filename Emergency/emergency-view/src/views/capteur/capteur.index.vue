@@ -6,12 +6,11 @@
       @valider="fermerModale()"
     />
     <div class="content-header">
-      <h1>Capteurs</h1>
-      <div class="m-2">
+      <h1>
+        Capteurs
         <button class="btn btn-success" @click="ajouter()">+ Ajouter</button>
-      </div>
-
-      <table class="table table-bordered table-hover">
+      </h1>
+      <table class="table table-bordered">
         <thead>
           <tr class="d-flex">
             <th style="flex-basis: 25%">Code</th>
@@ -23,7 +22,7 @@
       </table>
     </div>
     <div class="content-body">
-      <table class="table table-bordered table-hover table-striped table-sm">
+      <table class="table table-bordered table-hover table-striped">
         <tbody>
           <tr
             v-for="(element, index) in liste"

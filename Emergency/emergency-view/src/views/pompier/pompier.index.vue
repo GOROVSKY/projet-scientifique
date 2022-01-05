@@ -6,31 +6,33 @@
       @valider="fermerModale()"
     />
     <div class="content-header">
-      <h1>Pompiers</h1>
-      <div class="m-2">
+      <h1>
+        Pompiers
         <button class="btn btn-success" @click="ajouter()">+ Ajouter</button>
-      </div>
-    </div>
-    <div class="content-body">
-      <table class="table-bordered table-hover table-stripped">
+      </h1>
+      <table class="table table-bordered">
         <thead>
-          <tr>
-            <th>Nom</th>
-            <th>Prénom</th>
-            <th>Age</th>
-            <th>Tel</th>
-            <th>Energie</th>
-            <th>Année d'expérience</th>
-            <th>Caserne</th>
+          <tr class="d-flex">
+            <th style="flex-basis: calc(100% / 7)">Nom</th>
+            <th style="flex-basis: calc(100% / 7)">Prénom</th>
+            <th style="flex-basis: calc(100% / 7)">Age</th>
+            <th style="flex-basis: calc(100% / 7)">Tel</th>
+            <th style="flex-basis: calc(100% / 7)">Energie</th>
+            <th style="flex-basis: calc(100% / 7)">Année d'expérience</th>
+            <th style="flex-basis: calc(100% / 7)">Caserne</th>
           </tr>
         </thead>
+      </table>
+    </div>
+    <div class="content-body">
+      <table class="table table-bordered table-hover table-striped">
         <tbody>
           <tr
             v-for="(element, index) in liste"
             :key="index"
-            class="show-overlay"
+            class="d-flex show-overlay"
           >
-            <td>
+            <td style="flex-basis: calc(100% / 7)">
               {{ element.nom }}
               <div class="overlay">
                 <button class="btn btn-sm btn-edit" @click="modifier(element)">
@@ -44,12 +46,12 @@
                 </button>
               </div>
             </td>
-            <td>{{ element.prenom }}</td>
-            <td>{{ element.age }}</td>
-            <td>{{ element.tel }}</td>
-            <td>{{ element.energie }}</td>
-            <td>{{ element.annees_experience }}</td>
-            <td>{{ element.caserne_nom }}</td>
+            <td style="flex-basis: calc(100% / 7)">{{ element.prenom }}</td>
+            <td style="flex-basis: calc(100% / 7)">{{ element.age }}</td>
+            <td style="flex-basis: calc(100% / 7)">{{ element.tel }}</td>
+            <td style="flex-basis: calc(100% / 7)">{{ element.energie }}</td>
+            <td style="flex-basis: calc(100% / 7)">{{ element.annees_experience }}</td>
+            <td style="flex-basis: calc(100% / 7)">{{ element.caserne_nom }}</td>
           </tr>
         </tbody>
       </table>

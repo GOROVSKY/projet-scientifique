@@ -6,31 +6,33 @@
       @valider="fermerModale()"
     />
     <div class="content-header">
-      <h1>Véhicules</h1>
-      <div class="m-2">
+      <h1>
+        Véhicules
         <button class="btn btn-success" @click="ajouter()">+ Ajouter</button>
-      </div>
-    </div>
-    <div class="content-body">
-      <table class="table-bordered table-hover table-stripped">
+      </h1>
+      <table class="table table-bordered">
         <thead>
-          <tr>
-            <th>Num immatriculation</th>
-            <th>Modèle</th>
-            <th>Capacité de personnes</th>
-            <th>Capacité de produit</th>
-            <th>Caserne</th>
-            <th>Longitude</th>
-            <th>Latitude</th>
+          <tr class="d-flex">
+            <th style="flex-basis: calc(100% / 7)">Num immatriculation</th>
+            <th style="flex-basis: calc(100% / 7)">Modèle</th>
+            <th style="flex-basis: calc(100% / 7)">Capacité de personnes</th>
+            <th style="flex-basis: calc(100% / 7)">Capacité de produit</th>
+            <th style="flex-basis: calc(100% / 7)">Caserne</th>
+            <th style="flex-basis: calc(100% / 7)">Longitude</th>
+            <th style="flex-basis: calc(100% / 7)">Latitude</th>
           </tr>
         </thead>
+      </table>
+    </div>
+    <div class="content-body">
+      <table class="table table-bordered table-hover table-striped">
         <tbody>
           <tr
             v-for="(element, index) in liste"
             :key="index"
-            class="show-overlay"
+            class="d-flex show-overlay"
           >
-            <td>
+            <td style="flex-basis: calc(100% / 7)">
               {{ element.num_immatriculation }}
               <div class="overlay">
                 <button class="btn btn-sm btn-edit" @click="modifier(element)">
@@ -44,12 +46,18 @@
                 </button>
               </div>
             </td>
-            <td>{{ element.modele }}</td>
-            <td>{{ element.capacite_personne }}</td>
-            <td>{{ element.capacite_produit }}</td>
-            <td>{{ element.caserne_nom }}</td>
-            <td>{{ element.longitude }}</td>
-            <td>{{ element.latitude }}</td>
+            <td style="flex-basis: calc(100% / 7)">{{ element.modele }}</td>
+            <td style="flex-basis: calc(100% / 7)">
+              {{ element.capacite_personne }}
+            </td>
+            <td style="flex-basis: calc(100% / 7)">
+              {{ element.capacite_produit }}
+            </td>
+            <td style="flex-basis: calc(100% / 7)">
+              {{ element.caserne_nom }}
+            </td>
+            <td style="flex-basis: calc(100% / 7)">{{ element.longitude }}</td>
+            <td style="flex-basis: calc(100% / 7)">{{ element.latitude }}</td>
           </tr>
         </tbody>
       </table>

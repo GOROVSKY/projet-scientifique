@@ -230,7 +230,7 @@ export default {
 
         this.recupererVehicules().then(() => {
             this.ajouterVehicules();
-            this.deplacerVehicule();
+            // this.deplacerVehicule();
         })
 
         this.recupererIncidents().then(() => {
@@ -240,7 +240,7 @@ export default {
         this.interval = setInterval(() => {
             this.recupererVehicules().then(() => {
                 this.ajouterVehicules();
-                this.deplacerVehicule();
+                // this.deplacerVehicule();
             })
             this.recupererIncidents().then(() => {
                 this.ajouterIncidents();

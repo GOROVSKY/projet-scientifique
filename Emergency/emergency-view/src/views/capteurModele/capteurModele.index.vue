@@ -11,26 +11,26 @@
       ref="capteurTypeSelection"
     />
     <div class="content-header">
-      <h1>Modèles</h1>
-      <div class="m-2">
-        <button class="btn btn-success" @click="ajouter()">+ Ajouter</button>
-      </div>
-    </div>
-    <div class="content-body">
-      <table class="table-bordered table-hover table-stripped">
+      <h1>Modèles 
+        <button class="btn btn-success" @click="ajouter()">+ Ajouter</button></h1>
+      <table class="table table-bordered">
         <thead>
-          <tr>
-            <th>Libellé</th>
-            <th>Types</th>
+          <tr class="d-flex">
+            <th style="flex-basis: 50%">Libellé</th>
+            <th style="flex-basis: 50%">Types</th>
           </tr>
         </thead>
+      </table>
+    </div>
+    <div class="content-body">
+      <table class="table table-bordered table-hover table-striped">
         <tbody>
           <tr
             v-for="(element, index) in liste"
             :key="index"
-            class="show-overlay"
+            class="d-flex show-overlay"
           >
-            <td>
+            <td style="flex-basis: 50%">
               {{ element.libelle }}
               <div class="overlay">
                 <button class="btn btn-sm btn-edit" @click="modifier(element)">
@@ -44,8 +44,8 @@
                 </button>
               </div>
             </td>
-            <td>
-              <ul>
+            <td style="flex-basis: 50%">
+              <ul style="margin: unset">
                 <li v-for="(type, index) in element.types_capteur" :key="index">
                   {{ type.libelle }}
                   <span
