@@ -11,7 +11,7 @@
         <button class="btn btn-success" @click="ajouter()">+ Ajouter</button>
       </div>
 
-      <table class="table-bordered table-hover">
+      <table class="table table-bordered table-hover">
         <thead>
           <tr class="d-flex">
             <th style="flex-basis: 25%">Code</th>
@@ -23,14 +23,14 @@
       </table>
     </div>
     <div class="content-body">
-      <table class="table-bordered table-hover table-stripped table-sm">
+      <table class="table table-bordered table-hover table-striped table-sm">
         <tbody>
           <tr
             v-for="(element, index) in liste"
             :key="index"
-            class="show-overlay"
+            class="d-flex show-overlay"
           >
-            <td>
+            <td style="flex-basis: 25%">
               {{ element.code }}
               <div class="overlay">
                 <button class="btn btn-sm btn-edit" @click="modifier(element)">
@@ -44,9 +44,9 @@
                 </button>
               </div>
             </td>
-            <td>{{ element.latitude }}</td>
-            <td>{{ element.longitude }}</td>
-            <td>
+            <td style="flex-basis: 25%">{{ element.latitude }}</td>
+            <td style="flex-basis: 25%">{{ element.longitude }}</td>
+            <td style="flex-basis: 25%">
               {{ element.modeleLibelle }}
             </td>
           </tr>

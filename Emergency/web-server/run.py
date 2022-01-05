@@ -348,12 +348,13 @@ def delete_capteur(id):
 def get_vehicule(id=None):
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     query = "SELECT v.id, v.modele, v.num_immatriculation, v.capacite_personne, v.capacite_produit, v.longitude, v.latitude, v.id_caserne, c.nom FROM vehicule v "
-    query += "LEFT JOIN caserne c ON v.id_caserne = c.id"
+    query += "LEFT JOIN caserne c ON v.id_caserne = c.id "
 
     if id is not None:
-        query += f" WHERE v.id = {id}"
+        query += "WHERE v.id = %s "
+    query += "ORDER BY v.num_immatriculation"
 
-    cur.execute(query)
+    cur.execute(query, (id,))
     rows = cur.fetchall()
 
     objects_list = []
@@ -364,44 +365,66 @@ def get_vehicule(id=None):
         d["num_immatriculation"] = row["num_immatriculation"]
         d["capacite_personne"] = int(row["capacite_personne"])
         d["capacite_produit"] = int(row["capacite_produit"])
-        d["longitude"] = row["longitude"]
+        d["longitude"] = float(row["longitude"])
         d["latitude"] = float(row["latitude"])
-        d["caserne_id"] = float(row["id_caserne"])
+        d["id_caserne"] = row["id_caserne"]
         d["caserne_nom"] = row["nom"]
         objects_list.append(d)
     return jsonify(objects_list)
 
 
+def update_entity(queries, id):
+    cur = conn.cursor()
+
+    for x in queries:
+        qry = x["query"] + " WHERE id = %s" #pour identifier l'entité
+        values = (x["value"], id)
+        cur.execute(qry, values)
+
+    conn.commit()
+    cur.close()
+
 @app.route('/api/vehicule', methods=['POST'])
 def post_vehicule():
-
+    # Erreur si pas d'id
     element = request.json
-    if element.get("id") is None or (element.get("latitude") is not None and element.get("longitude") is not None):
+    if element.get("id") is None:
         abort(422)
 
-    # requete = "UPDATE vehicule SET modele = %s, num_immatriculation = %s, capacite_personne = %s, capacite_produit = %s, longitude = %s, latitude = %s, id_caserne = %s"
-    requete = "UPDATE vehicule SET "
-    values = ()
+    # Modifications
+    queries = [] 
+    qry = {}
     if element.get("latitude") is not None:
-        requete += "latitude = %s, "
-        values += element.get("latitude"),
+        qry['query'] = "UPDATE vehicule SET latitude = %s"
+        qry['value'] = element.get("latitude")
+        queries.append(qry.copy())
     if element.get("longitude") is not None:
-        requete += "longitude = %s, "
-        values += element.get("longitude"),
+        qry['query'] = "UPDATE vehicule SET longitude = %s"
+        qry['value'] = element.get("longitude")
+        queries.append(qry.copy())
+    if element.get("modele") is not None:
+        qry['query'] = "UPDATE vehicule SET modele = %s"
+        qry['value'] = element.get("modele")
+        queries.append(qry.copy())
+    if element.get("num_immatriculation") is not None:
+        qry['query'] = "UPDATE vehicule SET num_immatriculation = %s"
+        qry['value'] = element.get("num_immatriculation")
+        queries.append(qry.copy())
+    if element.get("capacite_personne") is not None:
+        qry['query'] = "UPDATE vehicule SET capacite_personne = %s"
+        qry['value'] = element.get("capacite_personne")
+        queries.append(qry.copy())
+    if element.get("capacite_produit") is not None:
+        qry['query'] = "UPDATE vehicule SET capacite_produit = %s"
+        qry['value'] = element.get("capacite_produit")
+        queries.append(qry.copy())
+    if element.get("id_caserne") is not None:
+        qry['query'] = "UPDATE vehicule SET id_caserne = %s"
+        qry['value'] = element.get("id_caserne")
+        queries.append(qry.copy())
 
-    #Suppression dernière virgule
-    tmp = list(requete)
-    tmp[len(tmp) - 2] = ''
-    requete = "".join(tmp)
-    requete += "WHERE id = %s"
-    values += element.get("id"),
-    
-    # values = (element["modele"], element["num_immatriculation"], element["capacite_personne"],
-    #           element["capacite_produit"], element["longitude"], element["latitude"], element["caserne_id"], element["id"])
-
-    cur = conn.cursor()
-    cur.execute(requete, values)
-    conn.commit()
+    # Enregistrement
+    update_entity(queries, element.get("id"))
 
     return "", 201
 
@@ -410,12 +433,12 @@ def post_vehicule():
 def put_vehicule():
 
     element = request.json
-    if element.get("caserne_id") is None:
+    if element.get("id_caserne") is None:
         abort(422)
 
     requete = "INSERT INTO vehicule (modele, num_immatriculation, capacite_personne, capacite_produit, longitude, latitude, id_caserne) VALUES (%s, %s, %s, %s, %s, %s, %s)"
     values = (element.get("modele"), element.get("num_immatriculation"), element.get("capacite_personne"),
-              element.get("capacite_produit"), element.get("longitude"), element.get("latitude"), element.get("caserne_id"))
+              element.get("capacite_produit"), element.get("longitude"), element.get("latitude"), element.get("id_caserne"))
 
     cur = conn.cursor()
     cur.execute(requete, values)

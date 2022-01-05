@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="content-scroll">
     <CapteurModeleModifier
       v-if="afficherModale"
       :id="elementSelectionne?.id"
@@ -10,11 +10,13 @@
       @elementSelectionne="fermerModaleSelection()"
       ref="capteurTypeSelection"
     />
-    <h1>Modèles</h1>
-    <div class="m-2">
-      <button class="btn btn-success" @click="ajouter()">+ Ajouter</button>
+    <div class="content-header">
+      <h1>Modèles</h1>
+      <div class="m-2">
+        <button class="btn btn-success" @click="ajouter()">+ Ajouter</button>
+      </div>
     </div>
-    <div class="content-scroll">
+    <div class="content-body">
       <table class="table-bordered table-hover table-stripped">
         <thead>
           <tr>
@@ -45,11 +47,18 @@
             <td>
               <ul>
                 <li v-for="(type, index) in element.types_capteur" :key="index">
-                  {{ type.libelle }} <span class="fa fa-times txt-danger cursor-pointer" @click="supprimerType(element, type)"></span>
+                  {{ type.libelle }}
+                  <span
+                    class="fa fa-times txt-danger cursor-pointer"
+                    @click="supprimerType(element, type)"
+                  ></span>
                 </li>
               </ul>
               <div class="overlay">
-                <button class="btn btn-sm btn-success" @click="ajouterType(element)">
+                <button
+                  class="btn btn-sm btn-success"
+                  @click="ajouterType(element)"
+                >
                   <span class="fa fa-plus"></span>
                 </button>
               </div>

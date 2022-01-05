@@ -1,15 +1,17 @@
 <template>
-  <div>
+  <div class="content-scroll">
     <CaserneModifier
       v-if="afficherModale"
       :id="elementSelectionne?.id"
       @valider="fermerModale()"
     />
-    <h1>Casernes</h1>
-    <div class="m-2">
-      <button class="btn btn-success" @click="ajouter()">+ Ajouter</button>
+    <div class="content-header">
+      <h1>Casernes</h1>
+      <div class="m-2">
+        <button class="btn btn-success" @click="ajouter()">+ Ajouter</button>
+      </div>
     </div>
-    <div class="content-scroll">
+    <div class="content-body">
       <table class="table-bordered table-hover table-stripped">
         <thead>
           <tr>
@@ -23,13 +25,21 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(element, index) in liste" :key="index" class="show-overlay">
-            <td>{{ element.nom }}
+          <tr
+            v-for="(element, index) in liste"
+            :key="index"
+            class="show-overlay"
+          >
+            <td>
+              {{ element.nom }}
               <div class="overlay">
                 <button class="btn btn-sm btn-edit" @click="modifier(element)">
                   <span class="fa fa-edit"></span>
                 </button>
-                <button class="btn btn-sm btn-danger ms-1 me-1" @click="supprimer(element)">
+                <button
+                  class="btn btn-sm btn-danger ms-1 me-1"
+                  @click="supprimer(element)"
+                >
                   <span class="fa fa-trash"></span>
                 </button>
               </div>

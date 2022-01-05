@@ -1,15 +1,19 @@
 <template>
-  <div>
+  <div class="content-scroll">
     <CapteurTypeModifier
       v-if="afficherModale"
       :id="elementSelectionne?.id"
       @valider="fermerModale()"
     />
-    <h1>Types</h1>
-    <div class="m-2">
-      <button class="btn btn-success" @click="ajouter()"><span class="fa fa-plus"></span> Ajouter</button>
+    <div class="content-header">
+      <h1>Types</h1>
+      <div class="m-2">
+        <button class="btn btn-success" @click="ajouter()">
+          <span class="fa fa-plus"></span> Ajouter
+        </button>
+      </div>
     </div>
-    <div class="content-scroll">
+    <div class="content-body">
       <table class="table-bordered table-hover table-stripped">
         <thead>
           <tr>

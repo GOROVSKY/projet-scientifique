@@ -86,8 +86,14 @@ td, th {
 .content-body {
   overflow: auto;
   flex-grow: 1;
+  scrollbar-color: rgb(206, 50, 50) rgb(51, 40, 58);
+  scrollbar-width: thin;
 }
 
 .content-footer {
   border-top: 1px solid black;
+}
+
+.table {
+  margin-bottom: 0 !important;
 }
