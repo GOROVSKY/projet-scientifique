@@ -640,7 +640,32 @@ def get_incident(id=None):
         d["id"] = int(row["id"])
         d["date_debut"] = row["date_debut"]
         d["date_fin"] = row["date_fin"]
-        d["type"] = row["type"]
+        d["criticite"] = int(row["criticite"])
+        d["longitude"] = row["longitude"]
+        d["latitude"] = float(row["latitude"])
+        objects_list.append(d)
+    return jsonify(objects_list)
+
+    
+@app.route('/api/incident/historique/<id>', methods=['GET'])
+@app.route('/api/incident/historique', methods=['GET'])
+def get_incident_historique(id=None):
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = "SELECT * FROM incident "
+    query += "WHERE date_fin IS NOT NULL" 
+
+    if id is not None:
+        query += f"AND v.id = {id}"
+
+    cur.execute(query)
+    rows = cur.fetchall()
+
+    objects_list = []
+    for row in rows:
+        d = collections.OrderedDict()
+        d["id"] = int(row["id"])
+        d["date_debut"] = row["date_debut"]
+        d["date_fin"] = row["date_fin"]
         d["criticite"] = int(row["criticite"])
         d["longitude"] = row["longitude"]
         d["latitude"] = float(row["latitude"])

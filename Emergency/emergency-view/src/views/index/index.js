@@ -100,7 +100,7 @@ export default {
                         iconUrl: require('@/assets/images/vehicule.png'),
                         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
                         iconSize: [40, 40],
-                        iconAnchor: [12, 41],
+                        iconAnchor: [20, 20],
                         popupAnchor: [1, -34],
                         shadowSize: [41, 41]
                     })
@@ -134,7 +134,7 @@ export default {
                         iconUrl: require('@/assets/images/caserne.png'),
                         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
                         iconSize: [40, 40],
-                        iconAnchor: [12, 41],
+                        iconAnchor: [20, 20],
                         popupAnchor: [1, -34],
                         shadowSize: [41, 41]
                     })
@@ -167,7 +167,7 @@ export default {
                         iconUrl: require('@/assets/images/incident.png'),
                         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
                         iconSize: [40, 40],
-                        iconAnchor: [0, 0],
+                        iconAnchor: [20, 20],
                         popupAnchor: [1, -34],
                         shadowSize: [25, 25]
                     })
@@ -247,7 +247,7 @@ export default {
             this.recupererIncidents().then(() => {
                 this.ajouterIncidents();
             })
-        }, 3000);
+        }, 2000);
     },
 
     beforeUnmount() {

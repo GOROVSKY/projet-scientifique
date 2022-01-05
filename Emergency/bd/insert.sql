@@ -119,3 +119,7 @@ INSERT INTO public.vehicule_type_produit (id_vehicule, id_type_produit) OVERRIDI
 INSERT INTO public.vehicule_type_produit (id_vehicule, id_type_produit) OVERRIDING SYSTEM VALUE VALUES (1, 2);
 INSERT INTO public.vehicule_type_produit (id_vehicule, id_type_produit) OVERRIDING SYSTEM VALUE VALUES (2, 3);
 
+
+INSERT INTO public.incident (longitude, latitude, criticite, id_type_incident, date_debut) VALUES (4.862041, 45.751625, 7, 1, NOW());
+INSERT INTO public.incident (longitude, latitude, criticite, id_type_incident, date_debut) VALUES (4.842041, 45.781625, 7, 1, NOW());
+

@@ -24,6 +24,11 @@
     <router-link to="/capteurType" class="mt-3"
       ><span class="fa fa-cloud-sun-rain fa-2x"></span
     ></router-link>
+    <hr>
+    <router-link to="/historique" class="mt-auto"
+      ><span class="fa fa-history fa-2x"></span
+    ></router-link>
+    
   </div>
 </template>
 

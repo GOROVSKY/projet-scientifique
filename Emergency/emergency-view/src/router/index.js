@@ -36,6 +36,11 @@ const routes = [
     path: '/capteurType',
     name: 'capteurType',
     component: () => import('../views/capteurType/capteurType.index.vue')
+  },
+  {
+    path: '/historique',
+    name: 'historique',
+    component: () => import('../views/historique/historique.index.vue')
   }
 ]
 
