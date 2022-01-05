@@ -88,8 +88,8 @@ while 1:
             print("%d,%d,%d" % (id,type,val))
             json_val = {'id': id, 'type' : type , 'value' : val}
             #req = requests.post('http://%s:8000/api/sensor_data' % (IP_HOST), json = json_val)
-            #mqtt_message="intensity,id=%s,type=%s values=%s" % (str(id),str(type),str(val))
-            #publish(my_mqtt_client,mqtt_message)
+            mqtt_message="intensity,id=%s,type=%s values=%s" % (str(id),str(type),str(val))
+            publish(my_mqtt_client,mqtt_message)
             # if req.status_code ==200:
             #     print("Data inserted into database sucessfully")
     except Exception as e:
