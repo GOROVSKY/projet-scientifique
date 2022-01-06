@@ -329,7 +329,7 @@ ALTER TABLE ONLY public.detection
     ADD CONSTRAINT detection_pkey PRIMARY KEY (id_incident, id_capteur);
 
 ALTER TABLE ONLY public.historique
-    ADD CONSTRAINT historique_pkey PRIMARY KEY (id_type_capteur);
+    ADD CONSTRAINT historique_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY public.incident
     ADD CONSTRAINT incident_pkey PRIMARY KEY (id);

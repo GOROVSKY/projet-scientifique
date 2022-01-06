@@ -6,7 +6,6 @@ import psycopg2.extras
 import collections
 import datetime
 
-
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -58,20 +57,28 @@ def api_sensor_data():
         return jsonify(rows)
     elif request.method == 'POST':
         sensor = request.json
-        count = 0
-        print(sensor["id"])
+
         cur = conn.cursor()
-        query = "update capteur_donne set valeur = %s, date = %s where id_capteur = %s and id_type_capteur = %s"
-        values = (sensor["valeur"], datetime.datetime.now(),
-                  sensor["id_capteur"], sensor["id_type_capteur"])
-        cur.execute(query, values)
-        conn.commit()
-        query = "insert into historique (id_capteur,id_type_capteur,valeur,date) values (%s,%s,%s) "
-        values = (sensor["value"], datetime.datetime.now(), sensor["id"])
-        cur.execute(query, values)
-        conn.commit()
-        count += 1
-        print(count, "lignes mis à jour dans la table sensor")
+
+        try :
+            query = "UPDATE capteur_donnees SET valeur = %s, date = %s WHERE id_capteur = %s AND id_type_capteur = %s"
+            values = (sensor["value"], datetime.datetime.now(),
+                    sensor["id"], sensor["type"])
+            cur.execute(query, values)
+            conn.commit()
+        
+
+            query = "INSERT INTO historique (id_capteur, id_type_capteur, valeur, date) VALUES (%s, %s, %s, %s) "
+            values = (sensor["id"], sensor["type"],
+                    sensor["value"], datetime.datetime.now())
+            cur.execute(query, values)
+            conn.commit()
+            
+        except Exception as e :
+            print(e)
+            conn.rollback()
+            return "", 400
+
         return sensor
 
 
@@ -163,6 +170,7 @@ def put_modele_type_capteur():
 
     return "", 201
 
+
 @app.route('/api/modeleTypeCapteur/<id_modele_capteur>&<id_type_capteur>', methods=['DELETE'])
 def delete_modele_type_capteur(id_modele_capteur, id_type_capteur):
 
@@ -178,6 +186,8 @@ def delete_modele_type_capteur(id_modele_capteur, id_type_capteur):
     return "", 200
 
 ##### MODELE_CAPTEUR #####
+
+
 @app.route('/api/modeleCapteur', methods=['GET'])
 @app.route('/api/modeleCapteur/<id>', methods=['GET'])
 def get_modele_capteur(id=None):
@@ -206,9 +216,9 @@ def get_modele_capteur(id=None):
         d["types_capteur"] = []
         tmp = list(filter(lambda x: x[0] == row["id"], mtc))
         for i in tmp:
-            dico = { 'id': i[1], 'libelle' : i[2] }
+            dico = {'id': i[1], 'libelle': i[2]}
             d["types_capteur"].append(dico.copy())
-        
+
         objects_list.append(d)
     return jsonify(objects_list)
 
@@ -377,12 +387,13 @@ def update_entity(queries, id):
     cur = conn.cursor()
 
     for x in queries:
-        qry = x["query"] + " WHERE id = %s" #pour identifier l'entité
+        qry = x["query"] + " WHERE id = %s"  # pour identifier l'entité
         values = (x["value"], id)
         cur.execute(qry, values)
 
     conn.commit()
     cur.close()
+
 
 @app.route('/api/vehicule', methods=['POST'])
 def post_vehicule():
@@ -392,7 +403,7 @@ def post_vehicule():
         abort(422)
 
     # Modifications
-    queries = [] 
+    queries = []
     qry = {}
     if element.get("latitude") is not None:
         qry['query'] = "UPDATE vehicule SET latitude = %s"
@@ -541,6 +552,8 @@ def delete_caserne(id):
     return "", 200
 
 ##### POMPIER #####
+
+
 @app.route('/api/pompier', methods=['GET'])
 @app.route('/api/pompier/<id>', methods=['GET'])
 def get_pompier(id=None):
@@ -621,15 +634,18 @@ def delete_pompier(id):
     return "", 200
 
 ##### INCIDENT #####
+
+
 @app.route('/api/incident', methods=['GET'])
 @app.route('/api/incident/<id>', methods=['GET'])
 def get_incident(id=None):
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     query = "SELECT * FROM incident "
-    query += "WHERE date_fin IS NULL " 
+    query += "JOIN type_incident ti ON incident.id_type_incident = ti.id "
+    query += "WHERE date_fin IS NULL "
 
     if id is not None:
-        query += f"AND v.id = {id}"
+        query += f"AND id = {id}"
 
     cur.execute(query)
     rows = cur.fetchall()
@@ -643,22 +659,44 @@ def get_incident(id=None):
         d["criticite"] = int(row["criticite"])
         d["longitude"] = row["longitude"]
         d["latitude"] = float(row["latitude"])
+        d["type_incident_libelle"] = row["libelle"]
         objects_list.append(d)
     return jsonify(objects_list)
 
-    
+
 @app.route('/api/incident/historique/<id>', methods=['GET'])
 @app.route('/api/incident/historique', methods=['GET'])
 def get_incident_historique(id=None):
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    query = "SELECT * FROM incident "
-    query += "WHERE date_fin IS NOT NULL" 
+    query = "SELECT i.id, i.date_debut, i.date_fin, i.criticite, i.longitude, i.latitude, i.id_type_incident, ti.id as type_incident_id, ti.libelle as type_libelle FROM incident i "
+    query += "JOIN type_incident ti ON i.id_type_incident = ti.id "
+    query += "WHERE date_fin IS NOT NULL "
+
+    qryVehicule = "SELECT * FROM vehicule "
+    qryVehiculeIncident = "SELECT * FROM vehicule_incident "
+
+    qryPompier = "SELECT * FROM pompier "
+    qryPompierIncident = "SELECT * FROM pompier_incident "
 
     if id is not None:
         query += f"AND v.id = {id}"
+        qryVehiculeIncident += f"WHERE id_incident = {id}"
+        qryPompierIncident += f"WHERE id_incident = {id}"
 
     cur.execute(query)
     rows = cur.fetchall()
+
+    cur.execute(qryVehiculeIncident)
+    vehicules_incidents = cur.fetchall()
+
+    cur.execute(qryVehicule)
+    vehicules = cur.fetchall()
+
+    cur.execute(qryPompierIncident)
+    pompiers_incidents = cur.fetchall()
+
+    cur.execute(qryPompier)
+    pompiers = cur.fetchall()
 
     objects_list = []
     for row in rows:
@@ -669,5 +707,46 @@ def get_incident_historique(id=None):
         d["criticite"] = int(row["criticite"])
         d["longitude"] = row["longitude"]
         d["latitude"] = float(row["latitude"])
+        d["id_type_incident"] = row["id_type_incident"]
+        d["type_incident_libelle"] = row["type_libelle"]
+        d["vehicules"] = []
+        d["pompiers"] = []
+
+        vehicules_incident = (
+            x for x in vehicules_incidents if x["id_incident"] == d["id"])
+        pompiers_incident = (
+            x for x in pompiers_incidents if x["id_incident"] == d["id"])
+
+        # Véhicules
+        for x in vehicules_incident:
+            vehicule = next(
+                y for y in vehicules if y["id"] == x["id_vehicule"])
+            v = collections.OrderedDict()
+            v["id"] = int(vehicule["id"])
+            v["modele"] = vehicule["modele"]
+            v["num_immatriculation"] = vehicule["num_immatriculation"]
+            v["capacite_personne"] = int(vehicule["capacite_personne"])
+            v["capacite_produit"] = int(vehicule["capacite_produit"])
+            v["longitude"] = float(vehicule["longitude"])
+            v["latitude"] = float(vehicule["latitude"])
+            v["id_caserne"] = vehicule["id_caserne"]
+
+            d["vehicules"].append(v)
+
+        # Pompiers
+        for x in pompiers_incident:
+            pompier = next(
+                y for y in pompiers if y["id"] == x["id_pompier"])
+            p = collections.OrderedDict()
+            p["id"] = int(pompier["id"])
+            p["nom"] = pompier["nom"]
+            p["prenom"] = pompier["prenom"]
+            p["age"] = int(pompier["age"])
+            p["tel"] = pompier["tel"]
+            p["annees_experience"] = pompier["annees_experience"]
+            p["energie"] = pompier["energie"]
+
+            d["pompiers"].append(p)
+
         objects_list.append(d)
     return jsonify(objects_list)

@@ -34,3 +34,6 @@
 
 <script src="./menu.js">
 </script>
+
+<style scoped>
+</style>

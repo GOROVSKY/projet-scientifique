@@ -1,7 +1,8 @@
+DELETE FROM historique;
 DELETE FROM modele_type_capteur;
+DELETE FROM type_capteur;
 DELETE FROM capteur;
 DELETE FROM modele_capteur;
-DELETE FROM type_capteur;
 DELETE FROM pompier_incident;
 DELETE FROM vehicule_incident;
 DELETE FROM pompier;
@@ -9,13 +10,15 @@ DELETE FROM vehicule_type_produit;
 DELETE FROM type_produit;
 DELETE FROM vehicule;
 DELETE FROM caserne;
+DELETE FROM incident;
 DELETE FROM type_incident;
+DELETE FROM detection;
 
-INSERT INTO type_capteur (id,libelle) OVERRIDING SYSTEM VALUE VALUES (1,'Intensité feu');
-INSERT INTO type_capteur (id,libelle) OVERRIDING SYSTEM VALUE VALUES (2,'Niveau d''eau');
-INSERT INTO type_capteur (id,libelle) OVERRIDING SYSTEM VALUE VALUES (3,'Pression rocheuse');
-INSERT INTO type_capteur (id,libelle) OVERRIDING SYSTEM VALUE VALUES (4,'Electrocardiogramme');
-INSERT INTO type_capteur (id,libelle) OVERRIDING SYSTEM VALUE VALUES (5,'Fummée');
+INSERT INTO type_capteur (id, libelle) OVERRIDING SYSTEM VALUE VALUES (1, 'Intensité feu');
+INSERT INTO type_capteur (id, libelle) OVERRIDING SYSTEM VALUE VALUES (2, 'Niveau d''eau');
+INSERT INTO type_capteur (id, libelle) OVERRIDING SYSTEM VALUE VALUES (3, 'Pression rocheuse');
+INSERT INTO type_capteur (id, libelle) OVERRIDING SYSTEM VALUE VALUES (4, 'Electrocardiogramme');
+INSERT INTO type_capteur (id, libelle) OVERRIDING SYSTEM VALUE VALUES (5, 'Fummée');
 
 INSERT INTO type_incident (id,libelle) OVERRIDING SYSTEM VALUE VALUES (1,'FEU CLASSE A');
 INSERT INTO type_incident (id,libelle) OVERRIDING SYSTEM VALUE VALUES (2,'FEU CLASSE B');
@@ -108,8 +111,8 @@ INSERT INTO public.pompier (id, nom, prenom, age, tel, annees_experience, energi
 INSERT INTO public.pompier (id, nom, prenom, age, tel, annees_experience, energie, id_caserne) OVERRIDING SYSTEM VALUE VALUES (2, 'Jean', 'Ferrat', 32, '089873748', 12, 80, 1);
 INSERT INTO public.pompier (id, nom, prenom, age, tel, annees_experience, energie, id_caserne) OVERRIDING SYSTEM VALUE VALUES (3, 'Jeanne', 'Kartier', 26, '0782456123', 4, 60, 2);
 
-INSERT INTO public.vehicule (id, modele, num_immatriculation, capacite_personne, capacite_produit, longitude, latitude, id_caserne) OVERRIDING SYSTEM VALUE VALUES (1, 'V4HA2', '343-DA2-H3D', 6, 500, '4.860462', '45.763904', 1);
-INSERT INTO public.vehicule (id, modele, num_immatriculation, capacite_personne, capacite_produit, longitude, latitude, id_caserne) OVERRIDING SYSTEM VALUE VALUES (2, 'V4HA6', '7H3-D8E-D38', 5, 400, '4.880516', '45.771871', 2);
+INSERT INTO public.vehicule (id, modele, num_immatriculation, capacite_personne, capacite_produit, longitude, latitude, id_caserne) OVERRIDING SYSTEM VALUE VALUES (1, 'V4HA2', '343-DA2-H3D', 6, 500, '4.878202', '45.778813', 1);
+INSERT INTO public.vehicule (id, modele, num_immatriculation, capacite_personne, capacite_produit, longitude, latitude, id_caserne) OVERRIDING SYSTEM VALUE VALUES (2, 'V4HA6', '7H3-D8E-D38', 5, 400, '4.851651', '45.768254', 2);
 
 INSERT INTO public.type_produit (id, libelle) OVERRIDING SYSTEM VALUE VALUES (1, 'Poudre');
 INSERT INTO public.type_produit (id, libelle) OVERRIDING SYSTEM VALUE VALUES (2, 'Mousse');
@@ -122,4 +125,19 @@ INSERT INTO public.vehicule_type_produit (id_vehicule, id_type_produit) OVERRIDI
 
 INSERT INTO public.incident (longitude, latitude, criticite, id_type_incident, date_debut) VALUES (4.862041, 45.751625, 7, 1, NOW());
 INSERT INTO public.incident (longitude, latitude, criticite, id_type_incident, date_debut) VALUES (4.842041, 45.781625, 7, 1, NOW());
+
+
+ALTER SEQUENCE IF EXISTS public.vehicule_id_seq
+    START 3;
+ALTER SEQUENCE IF EXISTS public.type_capteur_id_seq
+    START 6;ALTER SEQUENCE IF EXISTS public.vehicule_id_seq
+    START 3;
+ALTER SEQUENCE IF EXISTS public.type_produit_id_seq
+    START 4;
+ALTER SEQUENCE IF EXISTS public.type_incident_id_seq
+    START 9;
+ALTER SEQUENCE IF EXISTS public.pompier_id_seq
+    START 4;
+ALTER SEQUENCE IF EXISTS public.caserne_id_seq
+    START 3;
 

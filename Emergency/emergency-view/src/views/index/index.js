@@ -16,7 +16,6 @@ export default {
             markersVehicules: [],
             markersCasernes: [],
             markersIncidents: [],
-            direction: 0.0004,
             interval: null,
             affichageCaserne: true,
             affichageVehicule: true,
@@ -53,11 +52,6 @@ export default {
                 minZoom: 1,
                 maxZoom: 20,
             }).addTo(this.carte);
-
-
-            // this.carte.on('click', (e) => {
-            //     this.placerBorneUtilisateur(e)
-            // });
         },
 
         recupererVehicules() {
@@ -97,10 +91,9 @@ export default {
                 var options = {
                     draggable: false,
                     icon: new L.Icon({
-                        iconUrl: require('@/assets/images/vehicule.png'),
-                        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                        iconSize: [40, 40],
-                        iconAnchor: [20, 20],
+                        iconUrl: require('@/assets/images/camion_pompier.png'),
+                        iconSize: [50, 50],
+                        iconAnchor: [10, 0],
                         popupAnchor: [1, -34],
                         shadowSize: [41, 41]
                     })
@@ -108,7 +101,7 @@ export default {
 
                 var marker = L.marker(latlng, options);
                
-                var chaineInfo =  `<div style="font-size: 20px">${element.modele} <i>${element.num_immatriculation}</i></div><div>Longitude : <i>${element.longitude}</i></div><div>Latitude : <i>${element.latitude}</i></div>`
+                var chaineInfo =  `<div style="font-size: 20px">${element.modele} <i>${element.num_immatriculation}</i></div><div>Longitude : <i>${element.longitude}</i></div><div>Latitude : <i>${element.latitude}</i></div><div>ID : ${element.id}</div>`
                 chaineInfo += `<div>Caserne : ${element.caserne_nom}</div>`
                 marker.bindPopup(chaineInfo)
 
@@ -165,7 +158,7 @@ export default {
                     draggable: false,
                     icon: new L.Icon({
                         iconUrl: require('@/assets/images/incident.png'),
-                        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                        // shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
                         iconSize: [40, 40],
                         iconAnchor: [20, 20],
                         popupAnchor: [1, -34],
@@ -175,22 +168,12 @@ export default {
 
                 var marker = L.marker(latlng, options);
 
-                var chaineInfo = `<div style="font-size: 20px">Date de début : ${moment(element.date_debut).format("HH[h] mm[min]")}</div><div>Longitude : <i>${element.longitude}</i></div><div>Latitude : <i>${element.latitude}</i></div>`
+                var chaineInfo = `<div style="font-size: 20px">Date de début : ${moment(element.date_debut).format("HH[h] mm[min]")}</div><div>Type : ${element.type_incident_libelle}</div><div>Longitude : <i>${element.longitude}</i></div><div>Latitude : <i>${element.latitude}</i></div>`
                 marker.bindPopup(chaineInfo)
 
                 this.markersIncidents.push(marker);
                 this.afficherIncidents();
             });
-        },
-
-        deplacerVehicule() {
-            var latitude = this.vehicules[0]?.latitude;
-            if (latitude >= 45.8 || latitude <= 45.7) this.direction *= -1;
-
-            latitude += this.direction;
-
-            return api.mettreAJour("vehicule", { id: this.vehicules[0]?.id, latitude: latitude })
-                .then(() => { })
         },
 
         afficherCasernes() {
@@ -228,11 +211,10 @@ export default {
         this.creerCarte();
         this.recupererCasernes().then(() => {
             this.ajouterCasernes();
-        })
 
-        this.recupererVehicules().then(() => {
-            this.ajouterVehicules();
-            // this.deplacerVehicule();
+            this.recupererVehicules().then(() => {
+                this.ajouterVehicules();
+            })
         })
 
         this.recupererIncidents().then(() => {
@@ -242,7 +224,6 @@ export default {
         this.interval = setInterval(() => {
             this.recupererVehicules().then(() => {
                 this.ajouterVehicules();
-                // this.deplacerVehicule();
             })
             this.recupererIncidents().then(() => {
                 this.ajouterIncidents();
