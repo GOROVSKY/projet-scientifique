@@ -1,6 +1,6 @@
 <template>
   <Header />
-  <div class="d-flex h-100">
+  <div class="d-flex h-100" style="overflow: hidden">
     <Menu />
     <router-view id="main-router-view" />
   </div>

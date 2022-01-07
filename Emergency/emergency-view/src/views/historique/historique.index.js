@@ -10,13 +10,37 @@ export default {
     data() {
         return {
             liste: [],
-            moment: moment
+            moment: moment,
+            filtreDateDebut: null,
+            filtreDateFin: null
+        }
+    },
+
+    watch: {
+        filtreDateDebut: {
+            handler() {
+                if (this.filtreDateDebut == "") {
+                    this.filtreDateDebut = null;
+                }
+
+                this.recupererListe();
+            }
+        },
+        
+        filtreDateFin: {
+            handler() {
+                if (this.filtreDateFin == "") {
+                    this.filtreDateFin = null;
+                }
+
+                this.recupererListe();
+            }
         }
     },
 
     methods: {
         recupererListe() {
-            api.recuperer("incident/historique")
+            api.recuperer(`incident/historique?dateDebut=${this.filtreDateDebut}&dateFin=${this.filtreDateFin}`)
                 .then(result => {
                     this.liste = result.data;
                 })

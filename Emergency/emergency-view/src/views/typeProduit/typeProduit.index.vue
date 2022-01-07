@@ -1,13 +1,13 @@
 <template>
   <div class="content-scroll">
-    <CapteurTypeModifier
+    <TypeProduitModifier
       v-if="afficherModale"
       :id="elementSelectionne?.id"
       @valider="fermerModale()"
     />
     <div class="content-header">
       <h1>
-        Types de capteurs
+        Types de produit
         <button class="btn btn-success" @click="ajouter()">
           <span class="fa fa-plus"></span> Ajouter
         </button>
@@ -43,9 +43,7 @@
                 </button>
               </div>
             </td>
-            <td style="flex-basis: 50%">
-              {{ element.libelle }}
-            </td>
+            <td style="flex-basis: 50%">{{ element.libelle }}</td>
           </tr>
         </tbody>
       </table>
@@ -53,5 +51,5 @@
   </div>
 </template>
 
-<script src="./capteurType.index.js">
+<script src="./typeProduit.index.js">
 </script>

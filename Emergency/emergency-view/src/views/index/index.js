@@ -13,6 +13,7 @@ export default {
             vehicules: [],
             incidents: [],
             casernes: [],
+            pompiers: [],
             markersVehicules: [],
             markersCasernes: [],
             markersIncidents: [],
@@ -74,6 +75,13 @@ export default {
             return api.recuperer("incident")
                 .then(result => {
                     this.incidents = result.data;
+                })
+        },
+
+        recupererPompiers() {
+            return api.recuperer("pompier")
+                .then(result => {
+                    this.pompiers = result.data;
                 })
         },
 
@@ -215,6 +223,8 @@ export default {
             this.recupererVehicules().then(() => {
                 this.ajouterVehicules();
             })
+
+            this.recupererPompiers();
         })
 
         this.recupererIncidents().then(() => {
@@ -228,6 +238,8 @@ export default {
             this.recupererIncidents().then(() => {
                 this.ajouterIncidents();
             })
+            
+            this.recupererPompiers();
         }, 2000);
     },
 

@@ -13,13 +13,14 @@
       <table class="table table-bordered">
         <thead>
           <tr class="d-flex">
-            <th style="flex-basis: calc(100% / 7)">Num immatriculation</th>
-            <th style="flex-basis: calc(100% / 7)">Modèle</th>
-            <th style="flex-basis: calc(100% / 7)">Capacité de personnes</th>
-            <th style="flex-basis: calc(100% / 7)">Capacité de produit</th>
-            <th style="flex-basis: calc(100% / 7)">Caserne</th>
-            <th style="flex-basis: calc(100% / 7)">Longitude</th>
-            <th style="flex-basis: calc(100% / 7)">Latitude</th>
+            <th style="flex-basis: calc(100% / 8)">Num immatriculation</th>
+            <th style="flex-basis: calc(100% / 8)">Modèle</th>
+            <th style="flex-basis: calc(100% / 8)">Capacité de personnes</th>
+            <th style="flex-basis: calc(100% / 8)">Capacité de produit</th>
+            <th style="flex-basis: calc(100% / 8)">Type de produits</th>
+            <th style="flex-basis: calc(100% / 8)">Caserne</th>
+            <th style="flex-basis: calc(100% / 8)">Longitude</th>
+            <th style="flex-basis: calc(100% / 8)">Latitude</th>
           </tr>
         </thead>
       </table>
@@ -32,7 +33,7 @@
             :key="index"
             class="d-flex show-overlay"
           >
-            <td style="flex-basis: calc(100% / 7)">
+            <td style="flex-basis: calc(100% / 8)">
               {{ element.num_immatriculation }}
               <div class="overlay">
                 <button class="btn btn-sm btn-edit" @click="modifier(element)">
@@ -46,18 +47,26 @@
                 </button>
               </div>
             </td>
-            <td style="flex-basis: calc(100% / 7)">{{ element.modele }}</td>
-            <td style="flex-basis: calc(100% / 7)">
+            <td style="flex-basis: calc(100% / 8)">{{ element.modele }}</td>
+            <td style="flex-basis: calc(100% / 8)">
               {{ element.capacite_personne }}
             </td>
-            <td style="flex-basis: calc(100% / 7)">
+            <td style="flex-basis: calc(100% / 8)">
               {{ element.capacite_produit }}
             </td>
-            <td style="flex-basis: calc(100% / 7)">
+            <td style="flex-basis: calc(100% / 8)">
+              <span v-if="element.produits.length == 0"><i>Aucun</i></span>
+              <ul v-else>
+                <li v-for="(produit, index) in element.produits" :key="index">
+                  {{ produit.libelle }}
+                </li>
+              </ul>
+            </td>
+            <td style="flex-basis: calc(100% / 8)">
               {{ element.caserne_nom }}
             </td>
-            <td style="flex-basis: calc(100% / 7)">{{ element.longitude }}</td>
-            <td style="flex-basis: calc(100% / 7)">{{ element.latitude }}</td>
+            <td style="flex-basis: calc(100% / 8)">{{ element.longitude }}</td>
+            <td style="flex-basis: calc(100% / 8)">{{ element.latitude }}</td>
           </tr>
         </tbody>
       </table>

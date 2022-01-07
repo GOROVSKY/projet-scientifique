@@ -55,7 +55,8 @@ td, th {
   background-color: #424242;
   color: #f5f5f5;
   height: 80px;
-  flex-shrink: 0;-moz-box-shadow:0 5px 15px rgba(128, 128, 128, 1);
+  flex-shrink: 0;
+  -moz-box-shadow: 0 5px 15px rgba(128, 128, 128, 1);
   -webkit-box-shadow: 0 5px 15px rgba(128, 128, 128, 1);
   box-shadow: 0 5px 15px rgba(128, 128, 128, 1);
   position: relative;
@@ -72,20 +73,38 @@ td, th {
   padding: 1%;
   color: rgb(204, 204, 204);
   border-color: rgb(204, 204, 204);
+  overflow-y: auto;
+  overflow-x: inherit;
   position: relative;
+  scrollbar-color: rgb(206, 50, 50) rgb(51, 40, 58);
+  scrollbar-width: thin;
+  -moz-box-shadow: 5px 0px 15px rgba(128, 128, 128, 1);
+  -webkit-box-shadow: 5px 0px 15px rgba(128, 128, 128, 1);
+  box-shadow: 5px 0px 15px rgba(128, 128, 128, 1);
   z-index: 100;
 }
+
 .menu a, .menu a:hover {
   color: rgb(185, 185, 185);
 }
+
 .menu a.router-link-exact-active {
-  color:rgb(255, 255, 255)
+  color: rgb(255, 255, 255)
 }
+
 .menu hr {
   width: 100%;
   min-height: 3px !important;
   opacity: 1 !important;
   margin: 1.5rem 0 !important;
+}
+
+.recap {
+  position: relative;
+  z-index: 5;
+  -moz-box-shadow: 5px 0px 15px rgba(128, 128, 128, 0.5);
+  -webkit-box-shadow: 5px 0px 15px rgba(128, 128, 128, 0.5);
+  box-shadow: 5px 0px 15px rgba(128, 128, 128, 0.5);
 }
 
 #main-router-view {
@@ -98,9 +117,7 @@ td, th {
   flex-direction: column;
 }
 
-.content-header {
-
-}
+.content-header {}
 
 .content-body {
   overflow: auto;

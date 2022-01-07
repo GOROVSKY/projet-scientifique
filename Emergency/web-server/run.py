@@ -60,21 +60,20 @@ def api_sensor_data():
 
         cur = conn.cursor()
 
-        try :
+        try:
             query = "UPDATE capteur_donnees SET valeur = %s, date = %s WHERE id_capteur = %s AND id_type_capteur = %s"
             values = (sensor["value"], datetime.datetime.now(),
-                    sensor["id"], sensor["type"])
+                      sensor["id"], sensor["type"])
             cur.execute(query, values)
             conn.commit()
-        
 
             query = "INSERT INTO historique (id_capteur, id_type_capteur, valeur, date) VALUES (%s, %s, %s, %s) "
             values = (sensor["id"], sensor["type"],
-                    sensor["value"], datetime.datetime.now())
+                      sensor["value"], datetime.datetime.now())
             cur.execute(query, values)
             conn.commit()
-            
-        except Exception as e :
+
+        except Exception as e:
             print(e)
             conn.rollback()
             return "", 400
@@ -360,12 +359,23 @@ def get_vehicule(id=None):
     query = "SELECT v.id, v.modele, v.num_immatriculation, v.capacite_personne, v.capacite_produit, v.longitude, v.latitude, v.id_caserne, c.nom FROM vehicule v "
     query += "LEFT JOIN caserne c ON v.id_caserne = c.id "
 
+    qryTypeProduit = "SELECT * FROM type_produit"
+
+    qryVehciuleTypeProduit = "SELECT * FROM vehicule_type_produit "
+
     if id is not None:
         query += "WHERE v.id = %s "
-    query += "ORDER BY v.num_immatriculation"
+        qryVehciuleTypeProduit += "WHERE id_vehicule = %s"
 
+    query += "ORDER BY v.num_immatriculation"
     cur.execute(query, (id,))
     rows = cur.fetchall()
+
+    cur.execute(qryTypeProduit)
+    types_produits = cur.fetchall()
+
+    cur.execute(qryVehciuleTypeProduit, (id,))
+    vehicules_produits = cur.fetchall()
 
     objects_list = []
     for row in rows:
@@ -379,6 +389,21 @@ def get_vehicule(id=None):
         d["latitude"] = float(row["latitude"])
         d["id_caserne"] = row["id_caserne"]
         d["caserne_nom"] = row["nom"]
+        d["produits"] = []
+
+        # Produits fournis par le véhicule
+        vehicule_produits = (
+            x for x in vehicules_produits if x["id_vehicule"] == d["id"])
+
+        # Produits
+        for x in vehicule_produits:
+            produit = next(
+                y for y in types_produits if y["id"] == x["id_type_produit"])
+            p = collections.OrderedDict()
+            p["id"] = int(produit["id"])
+            p["libelle"] = produit["libelle"]
+            d["produits"].append(p)
+
         objects_list.append(d)
     return jsonify(objects_list)
 
@@ -465,6 +490,84 @@ def delete_vehicule(id):
         abort(422)
 
     requete = "DELETE FROM vehicule WHERE id = %s"
+
+    cur = conn.cursor()
+    cur.execute(requete, (id,))
+    conn.commit()
+
+    return "", 200
+
+
+##### TYPE_PRODUIT #####
+@app.route('/api/typeProduit', methods=['GET'])
+@app.route('/api/typeProduit/<id>', methods=['GET'])
+def get_type_produit(id=None):
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = "SELECT id, libelle FROM type_produit"
+
+    if id is not None:
+        query += f" WHERE id = {id}"
+
+    cur.execute(query)
+    rows = cur.fetchall()
+
+    objects_list = []
+    for row in rows:
+        d = collections.OrderedDict()
+        d["id"] = int(row["id"])
+        d["libelle"] = row["libelle"]
+        objects_list.append(d)
+    return jsonify(objects_list)
+
+
+@app.route('/api/typeProduit', methods=['POST'])
+def post_type_produit():
+    # Erreur si pas d'id
+    element = request.json
+    if element.get("id") is None:
+        abort(422)
+
+    # Modifications
+    queries = []
+    qry = {}
+    if element.get("libelle") is not None:
+        qry['query'] = "UPDATE type_produit SET libelle = %s"
+        qry['value'] = element.get("libelle")
+        queries.append(qry.copy())
+
+    # Enregistrement
+    update_entity(queries, element.get("id"))
+
+    return "", 201
+
+
+@app.route('/api/typeProduit', methods=['PUT'])
+def put_type_produit():
+
+    element = request.json
+    if element.get("libelle") is None:
+        abort(422)
+    try:
+        requete = "INSERT INTO type_produit (libelle) VALUES (%s)"
+        values = (element.get("libelle"),)
+
+        cur = conn.cursor()
+        cur.execute(requete, values)
+        conn.commit()
+    except Exception as e:
+        print(e)
+        conn.rollback()
+        return "", 400
+    return "", 201
+
+
+@app.route('/api/typeProduit/<id>', methods=['DELETE'])
+def delete_type_produit(id):
+
+    if id is None:
+        abort(422)
+
+    requete = "DELETE FROM type_produit WHERE id = %s"
 
     cur = conn.cursor()
     cur.execute(requete, (id,))
@@ -667,10 +770,16 @@ def get_incident(id=None):
 @app.route('/api/incident/historique/<id>', methods=['GET'])
 @app.route('/api/incident/historique', methods=['GET'])
 def get_incident_historique(id=None):
+    dateDebut = request.args.get('dateDebut', default=None)
+    dateFin = request.args.get('dateFin', default=None)
+
+    dateDebut =dateDebut if dateDebut != 'null' else None
+    dateFin = dateFin if dateFin != 'null' else None
+
+    # Requêtes
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     query = "SELECT i.id, i.date_debut, i.date_fin, i.criticite, i.longitude, i.latitude, i.id_type_incident, ti.id as type_incident_id, ti.libelle as type_libelle FROM incident i "
     query += "JOIN type_incident ti ON i.id_type_incident = ti.id "
-    query += "WHERE date_fin IS NOT NULL "
 
     qryVehicule = "SELECT * FROM vehicule "
     qryVehiculeIncident = "SELECT * FROM vehicule_incident "
@@ -678,26 +787,42 @@ def get_incident_historique(id=None):
     qryPompier = "SELECT * FROM pompier "
     qryPompierIncident = "SELECT * FROM pompier_incident "
 
+    # Filtres
+    if dateDebut is None and dateFin is None:
+        query += f"WHERE date_fin IS NOT NULL "
+    elif dateDebut is not None and dateFin is not None:
+        query += f"WHERE date_debut >= '{dateDebut}' AND date_fin <= '{dateFin}' "
+    elif dateDebut is not None:
+        query += f"WHERE date_debut >= '{dateDebut}' "
+    elif dateFin is not None:
+        query += f"WHERE date_Fin <= '{dateFin}' "
+
     if id is not None:
-        query += f"AND v.id = {id}"
+        query += f"AND i.id = {id}"
         qryVehiculeIncident += f"WHERE id_incident = {id}"
         qryPompierIncident += f"WHERE id_incident = {id}"
 
-    cur.execute(query)
-    rows = cur.fetchall()
+    # Executions
+    try:
+        cur.execute(query)
+        rows = cur.fetchall()
 
-    cur.execute(qryVehiculeIncident)
-    vehicules_incidents = cur.fetchall()
+        cur.execute(qryVehiculeIncident)
+        vehicules_incidents = cur.fetchall()
 
-    cur.execute(qryVehicule)
-    vehicules = cur.fetchall()
+        cur.execute(qryVehicule)
+        vehicules = cur.fetchall()
 
-    cur.execute(qryPompierIncident)
-    pompiers_incidents = cur.fetchall()
+        cur.execute(qryPompierIncident)
+        pompiers_incidents = cur.fetchall()
 
-    cur.execute(qryPompier)
-    pompiers = cur.fetchall()
+        cur.execute(qryPompier)
+        pompiers = cur.fetchall()
+    except Exception as e:
+        print(e)
+        return "", 400
 
+    # Liste en sortie
     objects_list = []
     for row in rows:
         d = collections.OrderedDict()
@@ -705,12 +830,15 @@ def get_incident_historique(id=None):
         d["date_debut"] = row["date_debut"]
         d["date_fin"] = row["date_fin"]
         d["criticite"] = int(row["criticite"])
-        d["longitude"] = row["longitude"]
-        d["latitude"] = float(row["latitude"])
         d["id_type_incident"] = row["id_type_incident"]
         d["type_incident_libelle"] = row["type_libelle"]
         d["vehicules"] = []
         d["pompiers"] = []
+
+        if row.get("longitude") is not None :
+            d["longitude"] = float(row["longitude"])
+        if row.get("latitude") is not None :
+            d["latitude"] = float(row["latitude"])
 
         vehicules_incident = (
             x for x in vehicules_incidents if x["id_incident"] == d["id"])

@@ -140,4 +140,6 @@ ALTER SEQUENCE IF EXISTS public.pompier_id_seq
     START 4;
 ALTER SEQUENCE IF EXISTS public.caserne_id_seq
     START 3;
+ALTER SEQUENCE IF EXISTS public.type_produit_id_seq
+    START 4;
 

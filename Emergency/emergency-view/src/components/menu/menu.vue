@@ -11,6 +11,9 @@
     <router-link to="/vehicule" class="mt-3"
       ><span class="fa fa-ambulance fa-2x"></span
     ></router-link>
+    <router-link to="/typeProduit" class="mt-3"
+      ><span class="fa fa-fire-extinguisher fa-2x"></span
+    ></router-link>
     <router-link to="/pompier" class="mt-3"
       ><span class="fa fa-user-nurse fa-2x"></span
     ></router-link>
@@ -34,6 +37,3 @@
 
 <script src="./menu.js">
 </script>
-
-<style scoped>
-</style>
