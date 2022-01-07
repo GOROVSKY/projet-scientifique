@@ -1,21 +1,26 @@
+package api;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import org.json.*;
 
 import models.Sensor;
-import okhttp3.*;
+import okhttp3.Call;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class ServerApi {
 
 	OkHttpClient client = new OkHttpClient();
 	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-	private String baseUrl = "http://192.168.37.83:5000/api/";
+	private String baseUrl = "http://192.168.8.123:5000/api/";
 
 	public ArrayList<Sensor> getSensors(String method) throws IOException {
 		ArrayList<Sensor> sensors = new ArrayList<Sensor>();
-
 		Request request = new Request.Builder().url(this.baseUrl + method).build();
 
 		Call call = client.newCall(request);
@@ -30,11 +35,9 @@ public class ServerApi {
 		if (jsonArray != null) {
 			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject json = (JSONObject) jsonArray.get(i);
-				
-				Sensor sensor = new Sensor((int) json.get("id"), (String) json.get("code"), (int) json.get("longitude"),
-						(int) json.get("latitude"), (int) json.get("type_id"),
-						json.isNull("value") == true ? -1 : (int) json.get("value"));
-
+				Sensor sensor = new Sensor((int) json.get("id"), (int) json.get("modeleId"), (String) json.get("modeleLibelle"), (String) json.get("code"),
+					(int) json.get("latitude"),(int) json.get("longitude"), (int) json.get("ligne"), (int) json.get("colonne"), 
+					(String) json.get("valeur"));
 				sensors.add(sensor);
 			}
 		}
