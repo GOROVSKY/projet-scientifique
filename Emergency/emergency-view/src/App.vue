@@ -1,7 +1,7 @@
 <template>
   <Header />
   <div class="d-flex h-100" style="overflow: hidden">
-    <Menu />
+    <Menu v-if="route != 'connexion'" />
     <router-view id="main-router-view" />
   </div>
 </template>
