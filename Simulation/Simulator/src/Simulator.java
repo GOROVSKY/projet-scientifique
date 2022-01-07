@@ -55,6 +55,8 @@ public class Simulator {
 						}
 						System.out.println("Entrer l'id du capteur a simuler");
 						int id = reader.nextInt();
+						System.out.println("Entrer l'id type du capteur");
+						int idT = reader.nextInt();
 						System.out.println("Entrer l'intensité de feu");
 						int val = reader.nextInt();
 						JSONObject json = new JSONObject();
@@ -63,6 +65,7 @@ public class Simulator {
 					    LocalDateTime now = LocalDateTime.now();  
 						json.put("date", now);
 						json.put("id", id);
+						json.put("idTypeCapteur", idT);
 						serverApi.post("capteur_donnees", json.toString());
 						sensors = serverApi.getSensors("capteur");
 						Thread.sleep(1000);

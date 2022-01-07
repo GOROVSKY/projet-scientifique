@@ -12,7 +12,9 @@ public class Sensor {
 	
 	public int id;
 	public int idModele;
+	public int idTypeCapteur;
 	public String modele;
+	public String typeCapteur;
 	public String code;
 	public float longitude;
 	public float latitude;
@@ -26,10 +28,12 @@ public class Sensor {
 	public static ArrayList<Sensor> sensors;
 
 	
-	public Sensor(int id,int idModele, String modele, String code, float longitude, float latitude, int ligne, int colonne, String valeur) {
+	public Sensor(int id,int idModele,int idTypeCapteur, String modele,String typeCapteur, String code, float longitude, float latitude, int ligne, int colonne, String valeur) {
 		this.id = id;
 		this.idModele = idModele;
+		this.idTypeCapteur=idTypeCapteur;
 		this.modele = modele;
+		this.typeCapteur = typeCapteur;
 		this.code = code;
 		this.longitude = longitude;
 		this.latitude = latitude;
@@ -76,6 +80,8 @@ public class Sensor {
 	
 	public String toString()
 	{
-		return "Capteur id :" + id + " modele :" + modele + " longitude :" + longitude + " latitude :" + latitude + " valeur :" + valeur;
+		return "Capteur id :" + id +" type capteur :" + typeCapteur +
+				" Id type capteur :" + idTypeCapteur +" modele :" + modele +
+				" longitude :" + longitude + " latitude :" + latitude + " valeur :" + valeur;
 	}
 }

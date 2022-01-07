@@ -1,5 +1,6 @@
 package api;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import org.json.*;
@@ -35,8 +36,8 @@ public class ServerApi {
 		if (jsonArray != null) {
 			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject json = (JSONObject) jsonArray.get(i);
-				Sensor sensor = new Sensor((int) json.get("id"), (int) json.get("modeleId"), (String) json.get("modeleLibelle"), (String) json.get("code"),
-					(int) json.get("latitude"),(int) json.get("longitude"), (int) json.get("ligne"), (int) json.get("colonne"), 
+				Sensor sensor = new Sensor((int) json.get("id"), (int) json.get("modeleId"),  (int) json.get("idTypeCapteur"), (String) json.get("modeleLibelle"), (String) json.get("typeCapteurLibelle"), (String) json.get("code"),
+					((BigDecimal) json.get("latitude")).floatValue(),((BigDecimal) json.get("longitude")).floatValue(), (int) json.get("ligne"), (int) json.get("colonne"), 
 					(String) json.get("valeur"));
 				sensors.add(sensor);
 			}
