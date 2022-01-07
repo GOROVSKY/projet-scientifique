@@ -2,7 +2,7 @@
   <div class="content-scroll">
     <div class="content-header">
       <h1>Historique des incidents</h1>
-      <div class="d-flex">
+      <div class="d-flex justify-content-center">
         <div class="me-4">
           Du
           <input type="date" v-model="filtreDateDebut" />

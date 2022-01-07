@@ -17,25 +17,36 @@
           />
         </div>
         <div class="me-4">
-          <label for="input-caserne"
+          <label for="input-vehicule"
             >Véhicules <span class="fa fa-ambulance text-success"></span
           ></label>
           <input
             class="ms-2"
             type="checkbox"
-            name="input-caserne"
+            name="input-vehicule"
             v-model="affichageVehicule"
           />
         </div>
-        <div>
-          <label for="input-caserne"
+        <div class="me-4">
+          <label for="input-incident"
             >Incidents <span class="fa fa-exclamation-circle text-danger"></span
           ></label>
           <input
             class="ms-2"
             type="checkbox"
-            name="input-caserne"
+            name="input-incident"
             v-model="affichageIncident"
+          />
+        </div>
+        <div>
+          <label for="input-capteur"
+            >Capteurs <span class="fa fa-video text-secondary"></span
+          ></label>
+          <input
+            class="ms-2"
+            type="checkbox"
+            name="input-capteur"
+            v-model="affichageCapteur"
           />
         </div>
       </div>
@@ -55,13 +66,32 @@
         <hr size="2"/>
       </div>
       <div class="content-body">
-        <div>{{ vehicules.length }} <span class="fa fa-ambulance"></span></div>
+        <div>{{ vehicules.length }} <span class="fa fa-ambulance"></span> <input
+            class="ms-2"
+            type="checkbox"
+            name="input-vehicule"
+            v-model="affichageVehicule"
+          /></div>
         <hr />
         <div>
-          {{ casernes.length }} <span class="fa fa-clinic-medical"></span>
+          {{ casernes.length }} <span class="fa fa-clinic-medical"></span> 
+          <input
+            class="ms-2"
+            type="checkbox"
+            name="input-caserne"
+            v-model="affichageCaserne"
+          />
         </div>
         <hr/>
         <div>{{ pompiers.length }} <span class="fa fa-user-nurse"></span></div>
+        <hr/>
+        <div>{{ capteurs.length }} <span class="fa fa-video"></span> 
+          <input
+            class="ms-2"
+            type="checkbox"
+            name="input-capteur"
+            v-model="affichageCapteur"
+          /></div>
       </div>
     </div>
     <div

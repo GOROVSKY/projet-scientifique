@@ -736,8 +736,8 @@ def delete_pompier(id):
 
     return "", 200
 
-##### INCIDENT #####
 
+##### INCIDENT #####
 
 @app.route('/api/incident', methods=['GET'])
 @app.route('/api/incident/<id>', methods=['GET'])
@@ -878,3 +878,43 @@ def get_incident_historique(id=None):
 
         objects_list.append(d)
     return jsonify(objects_list)
+
+
+
+##### VEHICULE_TYPE_PRODUIT #####
+@app.route('/api/vehiculeTypeProduit', methods=['PUT'])
+def put_vehicule_type_produit():
+
+    element = request.json
+    if element.get("id_vehicule") is None and element.get("id_type_produit") is None :
+        abort(422)
+
+    # On teste si l'association existe déjà
+    qryTmp = "SELECT * FROM vehicule_type_produit WHERE id_vehicule = %s AND id_type_produit = %s"
+    cur = conn.cursor()
+    cur.execute(qryTmp, (element.get("id_vehicule"), element.get("id_type_produit")))
+    tmp = cur.fetchone()
+    if tmp is not None :
+        return "", 400
+
+    requete = "INSERT INTO vehicule_type_produit (id_vehicule, id_type_produit) VALUES (%s, %s)"
+    values = (element.get("id_vehicule"), element.get("id_type_produit"))
+    cur.execute(requete, values)
+    conn.commit()
+
+    return "", 201
+
+
+@app.route('/api/vehiculeTypeProduit/<id_vehicule>&<id_produit>', methods=['DELETE'])
+def delete_vehicule_type_produit(id_vehicule=None, id_produit=None):
+
+    if id_vehicule is None and id_produit is None:
+        abort(422)
+
+    requete = "DELETE FROM vehicule_type_produit WHERE id_vehicule = %s AND id_type_produit = %s"
+
+    cur = conn.cursor()
+    cur.execute(requete, (id_vehicule, id_produit))
+    conn.commit()
+
+    return "", 200

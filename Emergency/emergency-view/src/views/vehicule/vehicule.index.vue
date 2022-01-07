@@ -5,6 +5,11 @@
       :id="elementSelectionne?.id"
       @valider="fermerModale()"
     />
+    <TypeProduitSelection
+      v-if="afficherProduit"
+      @elementSelectionne="fermerModaleProduit()"
+      ref="typeProduitSelection"
+    />
     <div class="content-header">
       <h1>
         Véhicules
@@ -59,8 +64,20 @@
               <ul v-else>
                 <li v-for="(produit, index) in element.produits" :key="index">
                   {{ produit.libelle }}
+                  <span
+                    class="fa fa-times cursor-pointer"
+                    @click="supprimerProduit(element, produit)"
+                  ></span>
                 </li>
               </ul>
+              <div class="overlay">
+                <button class="btn btn-sm btn-success" 
+                    @click="ajouterProduit(element)">
+                  <span
+                    class="fa fa-plus"
+                  ></span>
+                </button>
+              </div>
             </td>
             <td style="flex-basis: calc(100% / 8)">
               {{ element.caserne_nom }}

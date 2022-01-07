@@ -14,13 +14,16 @@ export default {
             incidents: [],
             casernes: [],
             pompiers: [],
+            capteurs: [],
             markersVehicules: [],
             markersCasernes: [],
             markersIncidents: [],
+            markersCapteurs: [],
             interval: null,
             affichageCaserne: true,
             affichageVehicule: true,
-            affichageIncident: true
+            affichageIncident: true,
+            affichageCapteur: false
         }
     },
 
@@ -40,6 +43,12 @@ export default {
         affichageIncident: {
             handler() {
                 this.afficherIncidents();
+            }
+        },
+
+        affichageCapteur: {
+            handler() {
+                this.afficherCapteurs();
             }
         }
     },
@@ -82,6 +91,13 @@ export default {
             return api.recuperer("pompier")
                 .then(result => {
                     this.pompiers = result.data;
+                })
+        },
+
+        recupererCapteurs() {
+            return api.recuperer("capteur")
+                .then(result => {
+                    this.capteurs = result.data;
                 })
         },
 
@@ -184,6 +200,39 @@ export default {
             });
         },
 
+        ajouterCapteurs() {
+            //On supprime tous les markers
+            this.markersCapteurs.forEach(x => {
+                this.carte.removeLayer(x);
+            })
+
+            this.markersCapteurs = [];
+
+            //On ajoute les markers
+            this.capteurs.forEach(element => {
+                var latlng = L.latLng(element.latitude, element.longitude);
+                var options = {
+                    draggable: false,
+                    icon: new L.Icon({
+                        iconUrl: require('@/assets/images/capteur.png'),
+                        // shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                        iconSize: [25, 25],
+                        iconAnchor: [20, 20],
+                        popupAnchor: [1, -34],
+                        shadowSize: [25, 25]
+                    })
+                }
+
+                var marker = L.marker(latlng, options);
+
+                var chaineInfo = `<div style="font-size: 20px">Code : ${element.code }</div><div>Modèle : ${element.modeleLibelle}</div><div>Longitude : <i>${element.longitude}</i></div><div>Latitude : <i>${element.latitude}</i></div>`
+                marker.bindPopup(chaineInfo)
+
+                this.markersCapteurs.push(marker);
+                this.afficherCapteurs();
+            });
+        },
+
         afficherCasernes() {
             this.markersCasernes.forEach(x => {
                 if (this.affichageCaserne) {
@@ -212,11 +261,28 @@ export default {
                     this.carte.removeLayer(x)
                 }
             })
+        },
+
+        afficherCapteurs() {
+            this.markersCapteurs.forEach(x => {
+                if (this.affichageCapteur) {
+                    this.carte.addLayer(x)
+                } else {
+                    this.carte.removeLayer(x)
+                }
+            })
         }
     },
 
     mounted() {
         this.creerCarte();
+
+        // Récupération et affichage des ressources 
+        this.recupererCapteurs().then(() => {
+            this.ajouterCapteurs();
+        })
+
+
         this.recupererCasernes().then(() => {
             this.ajouterCasernes();
 
@@ -231,6 +297,7 @@ export default {
             this.ajouterIncidents();
         })
 
+        // Boucle infinie pour récupérer la position des véhicules et des incidents en temps réel
         this.interval = setInterval(() => {
             this.recupererVehicules().then(() => {
                 this.ajouterVehicules();

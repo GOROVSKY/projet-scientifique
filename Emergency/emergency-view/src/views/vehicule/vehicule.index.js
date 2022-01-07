@@ -1,18 +1,21 @@
 import api from '@/api/api.js'
 
 import VehiculeModifier from './vehicule.modifier.vue';
+import TypeProduitSelection from '@/views/typeProduit/typeProduit.selection.vue';
 
 export default {
     name: 'VehiculeIndex',
 
     components: {
-        VehiculeModifier
+        VehiculeModifier,
+        TypeProduitSelection
     },
 
     data() {
         return {
             liste: [],
             afficherModale: false,
+            afficherProduit: false,
             elementSelectionne: null
         }
     },
@@ -41,9 +44,33 @@ export default {
                 })
         },
 
+        supprimerProduit(vehicule, produit) {
+            api.supprimerIds("vehiculeTypeProduit", { id1: vehicule.id, id2: produit.id })
+                .then(() => {
+                    this.recupererListe();
+                })
+        },
+
+        ajouterProduit(vehicule) {
+            this.elementSelectionne = vehicule;
+            this.afficherProduit = true;
+        },
+
         fermerModale() {
             this.afficherModale = false;
             this.elementSelectionne = null;
+            this.recupererListe();
+        },
+
+        async fermerModaleProduit() {
+            var produit = this.$refs.typeProduitSelection.elementSelectionne;
+            if (produit != null) {
+                await api.inserer("vehiculeTypeProduit", { id_vehicule: this.elementSelectionne.id, id_type_produit: produit.id})
+            }
+
+            this.afficherProduit = false;
+            this.elementSelectionne = null;
+
             this.recupererListe();
         }
     },
