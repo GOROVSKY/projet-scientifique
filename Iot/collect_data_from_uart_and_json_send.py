@@ -3,6 +3,7 @@ import time
 from paho.mqtt import client as mqtt_client
 import datetime
 import requests
+import threading
 #INFLUX DB 
 #U:admin
 #P:admincpe
@@ -18,7 +19,7 @@ topic = "projet/sensor_data"
 client_id = "microbit123"
 # username = 'emqx'
 # password = 'public'
-IP_HOST = "192.168.43.186"
+IP_HOST = "192.168.43.144"
 
 
 def connect_mqtt():
@@ -40,6 +41,11 @@ def publish(client,msg):
         print(f"Failed to send message to topic {topic}")
     msg_count += 1
 
+
+def send_json(json_val,ip_host):
+    req = requests.post('http://%s:5000/api/historique' % (ip_host), json = json_val)
+    if req.status_code ==200:
+        print("Data inserted into database sucessfully")
 
 def initUART():     
     # ser = serial.Serial(SERIALPORT, BAUDRATE)
@@ -75,6 +81,11 @@ my_mqtt_client = connect_mqtt()
 #my_mqtt_client.loop_start()
 while 1:
     time.sleep(0.02)
+    first_char = ser.read(1)
+    print(first_char)
+    while first_char !=b'\x8d':
+        first_char = ser.read(1)
+        print(first_char)
     try:
         nb_elements_as_bytes = ser.read(1)
         nb_elements = int.from_bytes(nb_elements_as_bytes,'big')
@@ -87,13 +98,12 @@ while 1:
             val = message[(i*4)+3]
             print("%d,%d,%d" % (id,type,val))
             json_val = {'id': id, 'type' : type , 'value' : val}
-            #req = requests.post('http://%s:8000/api/sensor_data' % (IP_HOST), json = json_val)
             mqtt_message="intensity,id=%s,type=%s values=%s" % (str(id),str(type),str(val))
-            publish(my_mqtt_client,mqtt_message)
-            # if req.status_code ==200:
-            #     print("Data inserted into database sucessfully")
+            #publish(my_mqtt_client,mqtt_message)
+            #threading.Thread(target=send_json, args=(json_val,IP_HOST)).start()
     except Exception as e:
         print("Failed to read or store data in database "+str(e))
+    
 
     #mqtt_message="intensity,row=%s,col=%s values=%s" % (str(message[0]),str(message[2]),str(message[4]))
 

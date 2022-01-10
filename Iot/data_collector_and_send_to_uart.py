@@ -34,14 +34,13 @@ def get_data_from_db_and_send_to_uart():
                         value_dict[sensor_id][msg_type]=value
                     print("id=%d,type=%d,value=%d" % (sensor_id,msg_type,value))
                 
-                
-                print("VALUE DICT")
+                #print("VALUE DICT")
                 msg = b''
                 nb_element_to_send=0
                 for sensor_id in value_dict:
                     for msg_type in value_dict[sensor_id]:
                         value= value_dict[sensor_id][msg_type]
-                        print("id=%d,type=%d,value=%d" % (sensor_id,msg_type,value_dict[sensor_id][msg_type]))
+                        #print("id=%d,type=%d,value=%d" % (sensor_id,msg_type,value_dict[sensor_id][msg_type]))
                         sensor_id_as_bytes = sensor_id.to_bytes(2,byteorder='big')
                         msg_type_as_bytes =  msg_type.to_bytes(1,byteorder='big') 
                         value_as_bytes = value.to_bytes(1,byteorder='big')
