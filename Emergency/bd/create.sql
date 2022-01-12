@@ -440,3 +440,19 @@ ALTER TABLE ONLY public.vehicule_type_produit
 
 ALTER TABLE ONLY public.vehicule_type_produit
     ADD CONSTRAINT fk_type_produit FOREIGN KEY (id_type_produit) REFERENCES public.type_produit(id);
+
+
+    
+
+
+
+CREATE TABLE public.capteur_reset (
+    id_capteur integer NOT NULL,
+    id_type_capteur integer NOT NULL
+);
+
+ALTER TABLE public.capteur_reset OWNER TO postgres;
+
+ALTER TABLE ONLY public.capteur_reset
+    ADD CONSTRAINT capteur_reset_pkey PRIMARY KEY (id_capteur, id_type_capteur);
+

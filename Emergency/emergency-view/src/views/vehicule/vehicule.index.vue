@@ -7,6 +7,7 @@
     />
     <TypeProduitSelection
       v-if="afficherProduit"
+      :vehicule="elementSelectionne"
       @elementSelectionne="fermerModaleProduit()"
       ref="typeProduitSelection"
     />

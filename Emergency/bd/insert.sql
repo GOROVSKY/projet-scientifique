@@ -13,6 +13,7 @@ DELETE FROM caserne;
 DELETE FROM incident;
 DELETE FROM type_incident;
 DELETE FROM detection;
+DELETE FROM capteur_reset;
 
 INSERT INTO type_capteur (id, libelle) OVERRIDING SYSTEM VALUE VALUES (1, 'Intensité feu');
 INSERT INTO type_capteur (id, libelle) OVERRIDING SYSTEM VALUE VALUES (2, 'Niveau d''eau');
@@ -123,8 +124,8 @@ INSERT INTO public.vehicule_type_produit (id_vehicule, id_type_produit) OVERRIDI
 INSERT INTO public.vehicule_type_produit (id_vehicule, id_type_produit) OVERRIDING SYSTEM VALUE VALUES (2, 3);
 
 
-INSERT INTO public.incident (longitude, latitude, criticite, id_type_incident, date_debut) VALUES (4.862041, 45.751625, 7, 1, NOW());
-INSERT INTO public.incident (longitude, latitude, criticite, id_type_incident, date_debut) VALUES (4.842041, 45.781625, 7, 1, NOW());
+-- INSERT INTO public.incident (longitude, latitude, criticite, id_type_incident, date_debut) VALUES (4.862041, 45.751625, 7, 1, NOW());
+-- INSERT INTO public.incident (longitude, latitude, criticite, id_type_incident, date_debut) VALUES (4.842041, 45.781625, 7, 1, NOW());
 
 
 ALTER SEQUENCE IF EXISTS public.vehicule_id_seq

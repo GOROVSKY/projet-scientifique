@@ -4,7 +4,7 @@
     <div class="content-scroll">
       <div class="d-flex flex-wrap">
         <div
-          v-for="(element, index) in liste"
+          v-for="(element, index) in listeVisible"
           :key="index"
           class="cursor-pointer m-3 p-3 border"
           @click="choisir(element)"

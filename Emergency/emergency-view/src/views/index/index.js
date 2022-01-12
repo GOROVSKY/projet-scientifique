@@ -23,7 +23,7 @@ export default {
             affichageCaserne: true,
             affichageVehicule: true,
             affichageIncident: true,
-            affichageCapteur: false
+            affichageCapteur: true
         }
     },
 
@@ -124,9 +124,15 @@ export default {
                 }
 
                 var marker = L.marker(latlng, options);
-               
-                var chaineInfo =  `<div style="font-size: 20px">${element.modele} <i>${element.num_immatriculation}</i></div><div>Longitude : <i>${element.longitude}</i></div><div>Latitude : <i>${element.latitude}</i></div><div>ID : ${element.id}</div>`
+
+                var chaineInfo = `<div style="font-size: 20px">${element.modele} <i>${element.num_immatriculation}</i></div><div>Longitude : <i>${element.longitude}</i></div><div>Latitude : <i>${element.latitude}</i></div><div>ID : ${element.id}</div>`
                 chaineInfo += `<div>Caserne : ${element.caserne_nom}</div>`
+                chaineInfo += `<div class="mt-2">Produits</div>`
+                chaineInfo += `<ul>`
+                element.produits.forEach(x => {
+                    chaineInfo += `<li>${x.libelle}</li>`
+                })
+                chaineInfo += `</ul>`
                 marker.bindPopup(chaineInfo)
 
                 this.markersVehicules.push(marker);
@@ -212,7 +218,7 @@ export default {
             this.capteurs.forEach(element => {
                 var latlng = L.latLng(element.latitude, element.longitude);
                 var options = {
-                    draggable: false,
+                    draggable: true,
                     icon: new L.Icon({
                         iconUrl: require('@/assets/images/capteur.png'),
                         // shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -225,7 +231,20 @@ export default {
 
                 var marker = L.marker(latlng, options);
 
-                var chaineInfo = `<div style="font-size: 20px">Code : ${element.code }</div><div>Modèle : ${element.modeleLibelle}</div><div>Longitude : <i>${element.longitude}</i></div><div>Latitude : <i>${element.latitude}</i></div>`
+                // // Mise à jour des coordonnées BD du capteur
+                // marker.on('dragend', function (event) {
+                //     var marker = event.target;
+                //     var position = marker.getLatLng();
+
+                //     element.latitude = position.lat;
+                //     element.longitude = position.lng;
+                //     api.mettreAJour("capteur", element)
+                //         .then(() => {
+                //         })
+                // });
+
+
+                var chaineInfo = `<div style="font-size: 20px">Code : ${element.code}</div><div>Modèle : ${element.modeleLibelle}</div><div>Longitude : <i>${element.longitude}</i></div><div>Latitude : <i>${element.latitude}</i></div>`
                 marker.bindPopup(chaineInfo)
 
                 this.markersCapteurs.push(marker);
@@ -305,7 +324,7 @@ export default {
             this.recupererIncidents().then(() => {
                 this.ajouterIncidents();
             })
-            
+
             this.recupererPompiers();
         }, 2000);
     },
