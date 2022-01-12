@@ -108,12 +108,17 @@ INSERT INTO public.capteur OVERRIDING SYSTEM VALUE VALUES (65, 'Capteur65', 45.7
 INSERT INTO public.caserne OVERRIDING SYSTEM VALUE VALUES (1, 'Caserne de Villeurbanne', '10 Rue Salengro', '69100', 'Villeurbanne', '0618253305', '45.778813', '4.878202');
 INSERT INTO public.caserne OVERRIDING SYSTEM VALUE VALUES (2, 'Caserne de Lyon', '57 Rue Bossuet', '69006', 'Lyon', '0912326545', '45.768254', '4.851651');
 
-INSERT INTO public.pompier (id, nom, prenom, age, tel, annees_experience, energie, id_caserne) OVERRIDING SYSTEM VALUE VALUES (1, 'Pierre', 'Kethal', 21, '0874387512', 0, 20, 1);
+INSERT INTO public.pompier (id, nom, prenom, age, tel, annees_experience, energie, id_caserne) OVERRIDING SYSTEM VALUE VALUES (1, 'Pierre', 'Khettal', 21, '0874387512', 0, 20, 1);
 INSERT INTO public.pompier (id, nom, prenom, age, tel, annees_experience, energie, id_caserne) OVERRIDING SYSTEM VALUE VALUES (2, 'Jean', 'Ferrat', 32, '089873748', 12, 80, 1);
 INSERT INTO public.pompier (id, nom, prenom, age, tel, annees_experience, energie, id_caserne) OVERRIDING SYSTEM VALUE VALUES (3, 'Jeanne', 'Kartier', 26, '0782456123', 4, 60, 2);
+INSERT INTO public.pompier (id, nom, prenom, age, tel, annees_experience, energie, id_caserne) OVERRIDING SYSTEM VALUE VALUES (4, 'Driss', 'Todu', 21, '0874387512', 0, 80, 2);
+INSERT INTO public.pompier (id, nom, prenom, age, tel, annees_experience, energie, id_caserne) OVERRIDING SYSTEM VALUE VALUES (5, 'Remi', 'Fugras', 21, '089873748', 10, 80, 2);
+INSERT INTO public.pompier (id, nom, prenom, age, tel, annees_experience, energie, id_caserne) OVERRIDING SYSTEM VALUE VALUES (6, 'Guillaume', 'Lequartier', 21, '0782456123', 4, 80, 1);
 
 INSERT INTO public.vehicule (id, modele, num_immatriculation, capacite_personne, capacite_produit, longitude, latitude, id_caserne) OVERRIDING SYSTEM VALUE VALUES (1, 'V4HA2', '343-DA2-H3D', 6, 500, '4.878202', '45.778813', 1);
-INSERT INTO public.vehicule (id, modele, num_immatriculation, capacite_personne, capacite_produit, longitude, latitude, id_caserne) OVERRIDING SYSTEM VALUE VALUES (2, 'V4HA6', '7H3-D8E-D38', 5, 400, '4.851651', '45.768254', 2);
+INSERT INTO public.vehicule (id, modele, num_immatriculation, capacite_personne, capacite_produit, longitude, latitude, id_caserne) OVERRIDING SYSTEM VALUE VALUES (2, 'V4HA6', '343-D8E-H3D', 5, 400, '4.851651', '45.768254', 2);
+INSERT INTO public.vehicule (id, modele, num_immatriculation, capacite_personne, capacite_produit, longitude, latitude, id_caserne) OVERRIDING SYSTEM VALUE VALUES (3, 'V4HA2', '343-DA2-H3D', 6, 500, '4.878202', '45.778813', 2);
+INSERT INTO public.vehicule (id, modele, num_immatriculation, capacite_personne, capacite_produit, longitude, latitude, id_caserne) OVERRIDING SYSTEM VALUE VALUES (4, 'V4HA6', '333-D8E-D38', 5, 400, '4.851651', '45.768254', 1);
 
 INSERT INTO public.type_produit (id, libelle) OVERRIDING SYSTEM VALUE VALUES (1, 'Poudre');
 INSERT INTO public.type_produit (id, libelle) OVERRIDING SYSTEM VALUE VALUES (2, 'Mousse');
