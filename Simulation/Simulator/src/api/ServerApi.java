@@ -18,7 +18,7 @@ public class ServerApi {
 	OkHttpClient client = new OkHttpClient();
 	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-	private String baseUrl = "http://192.168.8.123:5000/api/";
+	private String baseUrl = "http://127.0.0.1:5000/api/";
 
 	public ArrayList<Sensor> getSensors(String method) throws IOException {
 		ArrayList<Sensor> sensors = new ArrayList<Sensor>();

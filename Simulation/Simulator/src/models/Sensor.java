@@ -41,30 +41,11 @@ public class Sensor {
 		this.colonne = colonne;
 		this.valeur = valeur;
 	}
+
 	
-	public Sensor(int id, String code, float longitude, float latitude,  String valeur) {
+	public Sensor(int id,int idTypeCapteur) {
 		this.id = id;
-		this.code = code;
-		this.longitude = longitude;
-		this.latitude = latitude;
-		this.valeur = valeur;
-	}
-	
-	public Sensor(int id,int idModele) {
-		this.id = id;
-		this.idModele = idModele;
-	}
-	
-	
-	public void DetectFire() {
-		// int aléatoire compris dans [0,9]
-		/*if (this.typeId == Type.INTENSITY.valeur) {			
-			this.valeur = new Random().nextInt(Sensor.valeurMax - Sensor.valeurMin + 1) + Sensor.valeurMin;
-		}*/
-	}
-	
-	public void DetectNothing() {
-		this.valeur = "0";
+		this.idTypeCapteur = idTypeCapteur;
 	}
 	
 	public String ToJson() {
@@ -80,8 +61,8 @@ public class Sensor {
 	
 	public String toString()
 	{
-		return "Capteur id :" + id +" type capteur :" + typeCapteur +
-				" Id type capteur :" + idTypeCapteur +" modele :" + modele +
-				" longitude :" + longitude + " latitude :" + latitude + " valeur :" + valeur;
+		return "Capteur id :" + id +" | type capteur : " + typeCapteur +
+				" | id type capteur :" + idTypeCapteur +" | modele : " + modele +
+				" | valeur : " + valeur;
 	}
 }
