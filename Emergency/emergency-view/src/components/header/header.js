@@ -13,6 +13,11 @@ export default {
     methods: {
         connexion() {
             
+        },
+
+        deconnecter() {
+            this.$store.commit('deconnecter');
+            this.$router.push('/connexion')
         }
     },
 

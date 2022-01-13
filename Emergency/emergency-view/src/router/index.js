@@ -51,6 +51,11 @@ const routes = [
     path: '/connexion',
     name: 'connexion',
     component: () => import('../views/connexion/connexion.index.vue')
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'pageInexistante',
+    component: () => import('../views/pageInexistante/pageInexistante.index.vue')
   }
 ]
 

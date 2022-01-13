@@ -8,6 +8,9 @@ export default createStore({
   mutations: {
     connecter(state, payload) {
       state.utilisateur.identifiant = payload.identifiant
+    },
+    deconnecter(state) {
+      state.utilisateur = {}
     }
   },
   getters: {
@@ -19,6 +22,6 @@ export default createStore({
   },
   modules: {
   },
-  
+
   plugins: [createPersistedState()]
 })

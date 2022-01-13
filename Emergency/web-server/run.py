@@ -772,9 +772,11 @@ def get_incident(id=None):
 def get_incident_historique(id=None):
     dateDebut = request.args.get('dateDebut', default=None)
     dateFin = request.args.get('dateFin', default=None)
+    criticite = request.args.get('criticite', default=None)
 
-    dateDebut =dateDebut if dateDebut != 'null' else None
+    dateDebut = dateDebut if dateDebut != 'null' else None
     dateFin = dateFin if dateFin != 'null' else None
+    criticite = criticite if criticite != 'null' else None
 
     # Requêtes
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -801,6 +803,9 @@ def get_incident_historique(id=None):
         query += f"AND i.id = {id}"
         qryVehiculeIncident += f"WHERE id_incident = {id}"
         qryPompierIncident += f"WHERE id_incident = {id}"
+
+    if criticite is not None: 
+        query += f"AND i.criticite = {criticite}"
 
     # Executions
     try:
@@ -835,9 +840,9 @@ def get_incident_historique(id=None):
         d["vehicules"] = []
         d["pompiers"] = []
 
-        if row.get("longitude") is not None :
+        if row.get("longitude") is not None:
             d["longitude"] = float(row["longitude"])
-        if row.get("latitude") is not None :
+        if row.get("latitude") is not None:
             d["latitude"] = float(row["latitude"])
 
         vehicules_incident = (
@@ -880,21 +885,21 @@ def get_incident_historique(id=None):
     return jsonify(objects_list)
 
 
-
 ##### VEHICULE_TYPE_PRODUIT #####
 @app.route('/api/vehiculeTypeProduit', methods=['PUT'])
 def put_vehicule_type_produit():
 
     element = request.json
-    if element.get("id_vehicule") is None and element.get("id_type_produit") is None :
+    if element.get("id_vehicule") is None and element.get("id_type_produit") is None:
         abort(422)
 
     # On teste si l'association existe déjà
     qryTmp = "SELECT * FROM vehicule_type_produit WHERE id_vehicule = %s AND id_type_produit = %s"
     cur = conn.cursor()
-    cur.execute(qryTmp, (element.get("id_vehicule"), element.get("id_type_produit")))
+    cur.execute(qryTmp, (element.get("id_vehicule"),
+                element.get("id_type_produit")))
     tmp = cur.fetchone()
-    if tmp is not None :
+    if tmp is not None:
         return "", 400
 
     requete = "INSERT INTO vehicule_type_produit (id_vehicule, id_type_produit) VALUES (%s, %s)"

@@ -12,7 +12,8 @@ export default {
             liste: [],
             moment: moment,
             filtreDateDebut: null,
-            filtreDateFin: null
+            filtreDateFin: null,
+            filtreCriticite: null
         }
     },
 
@@ -35,16 +36,28 @@ export default {
 
                 this.recupererListe();
             }
+        },
+        
+        filtreCriticite: {
+            handler() {
+                this.recupererListe();
+            }
         }
     },
 
     methods: {
         recupererListe() {
-            api.recuperer(`incident/historique?dateDebut=${this.filtreDateDebut}&dateFin=${this.filtreDateFin}`)
+            api.recuperer(`incident/historique?dateDebut=${this.filtreDateDebut}&dateFin=${this.filtreDateFin}&criticite=${this.filtreCriticite}`)
                 .then(result => {
                     this.liste = result.data;
                 })
         },
+
+        reinitialiserFiltre() {
+            this.filtreDateDebut = null;
+            this.filtreDateFin = null;
+            this.filtreCriticite = null;
+        }
     },
 
     created() {

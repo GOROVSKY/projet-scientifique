@@ -10,9 +10,13 @@
       @elementSelectionne="fermerModaleSelection()"
       ref="capteurTypeSelection"
     />
+    <teleport to="#teleport-header">
+      <h1>
+        Modèles
+        <button class="btn btn-success" @click="ajouter()">+ Ajouter</button>
+      </h1>
+    </teleport>
     <div class="content-header">
-      <h1>Modèles 
-        <button class="btn btn-success" @click="ajouter()">+ Ajouter</button></h1>
       <table class="table table-bordered">
         <thead>
           <tr class="d-flex">
@@ -49,7 +53,7 @@
                 <li v-for="(type, index) in element.types_capteur" :key="index">
                   {{ type.libelle }}
                   <span
-                    class="fa fa-times txt-danger cursor-pointer"
+                    class="fa fa-times txt-danger cursor-pointer text-danger"
                     @click="supprimerType(element, type)"
                   ></span>
                 </li>
@@ -66,6 +70,12 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <div class="content-footer">
+      <div style="font-size: 1.2rem">
+        <b>{{ liste.length }} modèle<span v-if="liste.length > 1">s</span></b>
+      </div>
     </div>
   </div>
 </template>

@@ -5,11 +5,13 @@
       :id="elementSelectionne?.id"
       @valider="fermerModale()"
     />
-    <div class="content-header">
+    <teleport to="#teleport-header">
       <h1>
         Capteurs
         <button class="btn btn-success" @click="ajouter()">+ Ajouter</button>
       </h1>
+    </teleport>
+    <div class="content-header">
       <table class="table table-bordered">
         <thead>
           <tr class="d-flex">
@@ -53,7 +55,9 @@
       </table>
     </div>
     <div class="content-footer">
-      <h4>{{ liste.length }} capteurs</h4>
+      <div style="font-size: 1.2rem">
+        <b>{{ liste.length }} capteurs</b>
+      </div>
     </div>
   </div>
 </template>

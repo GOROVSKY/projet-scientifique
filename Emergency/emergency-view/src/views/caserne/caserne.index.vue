@@ -5,11 +5,13 @@
       :id="elementSelectionne?.id"
       @valider="fermerModale()"
     />
+    <teleport to="#teleport-header">
+      <h1>
+        Casernes
+        <button class="btn btn-success" @click="ajouter()">+ Ajouter</button>
+      </h1>
+    </teleport>
     <div class="content-header">
-      <h1>Casernes <button class="btn btn-success" @click="ajouter()">+ Ajouter</button></h1>
-        
-  
-
       <table class="table table-bordered">
         <thead>
           <tr class="d-flex">
@@ -55,6 +57,11 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class="content-footer">
+      <div style="font-size: 1.2rem">
+        <b>{{ liste.length }} caserne<span v-if="liste.length > 1">s</span></b>
+      </div>
     </div>
   </div>
 </template>

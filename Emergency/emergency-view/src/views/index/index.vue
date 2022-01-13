@@ -7,7 +7,7 @@
       >
         <div class="me-4">
           <label for="input-caserne"
-            >Casernes <span class="fa fa-clinic-medical text-primary"></span
+            >{{ casernes.length }} Caserne<span v-if="casernes.length > 1">s</span> <span class="fa fa-clinic-medical text-primary"></span
           ></label>
           <input
             class="ms-2"
@@ -18,7 +18,7 @@
         </div>
         <div class="me-4">
           <label for="input-vehicule"
-            >Véhicules <span class="fa fa-ambulance text-success"></span
+            >{{ vehicules.length }} Véhicule<span v-if="vehicules.length > 1">s</span> <span class="fa fa-ambulance text-success"></span
           ></label>
           <input
             class="ms-2"
@@ -29,7 +29,7 @@
         </div>
         <div class="me-4">
           <label for="input-incident"
-            >Incidents <span class="fa fa-exclamation-circle text-danger"></span
+            >{{ incidents.length }} Incident<span v-if="incidents.length > 1">s</span> <span class="fa fa-exclamation-circle text-danger"></span
           ></label>
           <input
             class="ms-2"
@@ -40,7 +40,7 @@
         </div>
         <div>
           <label for="input-capteur"
-            >Capteurs <span class="fa fa-video text-secondary"></span
+            >{{ capteurs.length }} Capteur<span v-if="capteurs.length > 1">s</span> <span class="fa fa-video text-secondary"></span
           ></label>
           <input
             class="ms-2"
@@ -53,28 +53,44 @@
     </teleport>
     <div style="flex-basis: 20%" class="content-scroll recap p-3">
       <div class="content-header">
-        <div><b>Situation</b></div>
+        <div><b>Situation en temps réel</b></div>
         <div class="mt-3">
-          <div v-if="incidents.length > 0" class="text-danger">
+          <div
+            v-if="incidents.length > 0"
+            class="text-danger"
+            style="font-size: 1.3rem"
+          >
             <b>{{ incidents.length }}</b>
-            <span class="fa fa-exclamation-circle"></span>
+            <span class="fa fa-exclamation-circle ms-1"></span>
+            <div class="mt-2" style="font-size: 0.8rem">
+              <table class="table table-hover">
+                <tbody>
+                  <tr v-for="(element, index) in incidents" :key="index" class="text-danger cursor-pointer" @click="zoomCarte(element)">
+                    <td><b>{{ element.type_incident_libelle }}</b><i class="ms-2">{{ moment(element.date_debut).format("HH[:]mm") }}</i></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
           <div v-else>
             <i>Aucun incident</i>
           </div>
         </div>
-        <hr size="2"/>
+        <!-- <hr size="2" /> -->
       </div>
-      <div class="content-body">
-        <div>{{ vehicules.length }} <span class="fa fa-ambulance"></span> <input
+      <!-- <div class="content-body">
+        <div>
+          {{ vehicules.length }} <span class="fa fa-ambulance"></span>
+          <input
             class="ms-2"
             type="checkbox"
             name="input-vehicule"
             v-model="affichageVehicule"
-          /></div>
+          />
+        </div>
         <hr />
         <div>
-          {{ casernes.length }} <span class="fa fa-clinic-medical"></span> 
+          {{ casernes.length }} <span class="fa fa-clinic-medical"></span>
           <input
             class="ms-2"
             type="checkbox"
@@ -82,17 +98,19 @@
             v-model="affichageCaserne"
           />
         </div>
-        <hr/>
+        <hr />
         <div>{{ pompiers.length }} <span class="fa fa-user-nurse"></span></div>
-        <hr/>
-        <div>{{ capteurs.length }} <span class="fa fa-video"></span> 
+        <hr />
+        <div>
+          {{ capteurs.length }} <span class="fa fa-video"></span>
           <input
             class="ms-2"
             type="checkbox"
             name="input-capteur"
             v-model="affichageCapteur"
-          /></div>
-      </div>
+          />
+        </div>
+      </div> -->
     </div>
     <div
       id="map"

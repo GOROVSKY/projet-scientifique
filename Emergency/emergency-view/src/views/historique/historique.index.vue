@@ -1,8 +1,10 @@
 <template>
   <div class="content-scroll">
+    <teleport to="#teleport-header"
+      ><h1>Historique des incidents</h1>
+    </teleport>
     <div class="content-header">
-      <h1>Historique des incidents</h1>
-      <div class="d-flex justify-content-center">
+      <div class="d-flex justify-content-center bandeau-filtre">
         <div class="me-4">
           Du
           <input type="date" v-model="filtreDateDebut" />
@@ -10,6 +12,13 @@
         <div class="me-4">
           Au
           <input type="date" v-model="filtreDateFin" />
+        </div>
+        <div class="me-4">
+          Criticité
+          <input type="number" min="0" max="10" v-model="filtreCriticite" />
+        </div>
+        <div class="me-4">
+          <button class="btn btn-sm btn-secondary" @click="reinitialiserFiltre()"><span class="fa fa-redo-alt"></span></button>
         </div>
       </div>
     </div>
@@ -56,7 +65,9 @@
       </div>
     </div>
     <div class="content-footer">
-      {{ liste.length }} incident<span v-if="liste.length > 1">s</span>
+      <div style="font-size: 1.2rem">
+        <b>{{ liste.length }} incident<span v-if="liste.length > 1">s</span></b>
+      </div>
     </div>
   </div>
 </template>

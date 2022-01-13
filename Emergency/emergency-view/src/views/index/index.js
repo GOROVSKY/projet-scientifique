@@ -23,7 +23,8 @@ export default {
             affichageCaserne: true,
             affichageVehicule: true,
             affichageIncident: true,
-            affichageCapteur: true
+            affichageCapteur: true,
+            moment: moment
         }
     },
 
@@ -117,7 +118,7 @@ export default {
                     icon: new L.Icon({
                         iconUrl: require('@/assets/images/camion_pompier.png'),
                         iconSize: [50, 50],
-                        iconAnchor: [10, 0],
+                        iconAnchor: [19, 19],
                         popupAnchor: [1, -34],
                         shadowSize: [41, 41]
                     })
@@ -218,7 +219,7 @@ export default {
             this.capteurs.forEach(element => {
                 var latlng = L.latLng(element.latitude, element.longitude);
                 var options = {
-                    draggable: true,
+                    draggable: false,
                     icon: new L.Icon({
                         iconUrl: require('@/assets/images/capteur.png'),
                         // shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -290,6 +291,10 @@ export default {
                     this.carte.removeLayer(x)
                 }
             })
+        },
+
+        zoomCarte(element) {
+            this.carte.setView([element.latitude, element.longitude])
         }
     },
 

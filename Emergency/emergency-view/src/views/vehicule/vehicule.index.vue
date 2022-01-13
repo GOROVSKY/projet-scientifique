@@ -11,11 +11,13 @@
       @elementSelectionne="fermerModaleProduit()"
       ref="typeProduitSelection"
     />
-    <div class="content-header">
+    <teleport to="#teleport-header">
       <h1>
         Véhicules
         <button class="btn btn-success" @click="ajouter()">+ Ajouter</button>
       </h1>
+    </teleport>
+    <div class="content-header">
       <table class="table table-bordered">
         <thead>
           <tr class="d-flex">
@@ -66,7 +68,7 @@
                 <li v-for="(produit, index) in element.produits" :key="index">
                   {{ produit.libelle }}
                   <span
-                    class="fa fa-times cursor-pointer"
+                    class="fa fa-times cursor-pointer text-danger"
                     @click="supprimerProduit(element, produit)"
                   ></span>
                 </li>
@@ -88,6 +90,11 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class="content-footer">
+      <div style="font-size: 1.2rem">
+        <b>{{ liste.length }} véhicule<span v-if="liste.length > 1">s</span></b>
+      </div>
     </div>
   </div>
 </template>

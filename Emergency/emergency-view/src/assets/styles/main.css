@@ -70,7 +70,7 @@ td, th {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1%;
+  padding: 20px 10px 10px;
   color: rgb(204, 204, 204);
   border-color: rgb(204, 204, 204);
   overflow-y: auto;
@@ -128,9 +128,18 @@ td, th {
 }
 
 .content-footer {
-  border-top: 1px solid black;
+  background-color: #afafaf;
+  -moz-box-shadow: 0 5px 15px rgba(128, 128, 128, 1);
+  -webkit-box-shadow: 0 5px 15px rgba(128, 128, 128, 1);
+  box-shadow: 0 5px 15px rgba(128, 128, 128, 1);
+  padding: 5px;
 }
 
 .table {
   margin-bottom: 0 !important;
+}
+
+.bandeau-filtre {
+  background-color: #c5d3df;
+  padding: 5px;
 }

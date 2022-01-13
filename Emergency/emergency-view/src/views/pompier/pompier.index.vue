@@ -5,11 +5,13 @@
       :id="elementSelectionne?.id"
       @valider="fermerModale()"
     />
-    <div class="content-header">
+    <teleport to="#teleport-header">
       <h1>
         Pompiers
         <button class="btn btn-success" @click="ajouter()">+ Ajouter</button>
       </h1>
+    </teleport>
+    <div class="content-header">
       <table class="table table-bordered">
         <thead>
           <tr class="d-flex">
@@ -50,11 +52,20 @@
             <td style="flex-basis: calc(100% / 7)">{{ element.age }}</td>
             <td style="flex-basis: calc(100% / 7)">{{ element.tel }}</td>
             <td style="flex-basis: calc(100% / 7)">{{ element.energie }}</td>
-            <td style="flex-basis: calc(100% / 7)">{{ element.annees_experience }}</td>
-            <td style="flex-basis: calc(100% / 7)">{{ element.caserne_nom }}</td>
+            <td style="flex-basis: calc(100% / 7)">
+              {{ element.annees_experience }}
+            </td>
+            <td style="flex-basis: calc(100% / 7)">
+              {{ element.caserne_nom }}
+            </td>
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class="content-footer">
+      <div style="font-size: 1.2rem">
+        <b>{{ liste.length }} pompier<span v-if="liste.length > 1">s</span></b>
+      </div>
     </div>
   </div>
 </template>

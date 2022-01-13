@@ -5,13 +5,15 @@
       :id="elementSelectionne?.id"
       @valider="fermerModale()"
     />
-    <div class="content-header">
+    <teleport to="#teleport-header">
       <h1>
         Types de produit
         <button class="btn btn-success" @click="ajouter()">
           <span class="fa fa-plus"></span> Ajouter
         </button>
       </h1>
+    </teleport>
+    <div class="content-header">
       <table class="table table-bordered">
         <thead>
           <tr class="d-flex">
@@ -47,6 +49,14 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class="content-footer">
+      <div style="font-size: 1.2rem">
+        <b
+          >{{ liste.length }} type<span v-if="liste.length > 1">s</span> de
+          produit</b
+        >
+      </div>
     </div>
   </div>
 </template>

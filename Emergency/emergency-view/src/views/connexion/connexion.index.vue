@@ -2,7 +2,9 @@
   <div
     class="d-flex h-100 align-items-center justify-content-center flex-column"
   >
+    <teleport to="#teleport-header">
     <h1>Connexion</h1>
+    </teleport>
     <div class="mt-3">
       <form class="text-start">
         <div class="d-flex flex-column">

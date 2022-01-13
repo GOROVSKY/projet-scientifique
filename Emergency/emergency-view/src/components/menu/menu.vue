@@ -2,7 +2,7 @@
   <div class="menu">
     <router-link to="/">
       <span class="fa fa-globe-europe fa-2x"></span>
-      <span class="info">Emergency</span>
+      <!-- <span class="info">Emergency</span> -->
     </router-link>
     <hr />
     <router-link to="/caserne"
