@@ -4,6 +4,8 @@ from paho.mqtt import client as mqtt_client
 import datetime
 import requests
 import threading
+from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
 #INFLUX DB 
 #U:admin
 #P:admincpe
@@ -20,6 +22,8 @@ client_id = "microbit123"
 # username = 'emqx'
 # password = 'public'
 IP_HOST = "192.168.43.144"
+key = b'\xa1\x52\xff\x94\xc6\xf5\x0d\xbc\x48\x98\xb6\x9d\xc7\xaf\x6d\x1b\x44\x35\xf8\x81\xe7\x65\x8b\x9b\xd5\xd4\x16\xd5\x4a\x97\x0f\x8d'
+initialisation_vector=b'\x99\x24\x02\xc0\x0f\x1f\x20\xb7\x9d\x19\xf9\x32\x1f\x0f\x72\xa6'
 
 
 def connect_mqtt():
@@ -75,23 +79,30 @@ except Exception as e:
     print("Failed to init UART "+str(e))
     exit(-1)
 
-time.sleep(3)
-
+#time.sleep(3)
 my_mqtt_client = connect_mqtt()
 #my_mqtt_client.loop_start()
 while 1:
     time.sleep(0.02)
-    first_char = ser.read(1)
-    print(first_char)
+    first_char=b''
     while first_char !=b'\x8d':
         first_char = ser.read(1)
         print(first_char)
     try:
         nb_elements_as_bytes = ser.read(1)
         nb_elements = int.from_bytes(nb_elements_as_bytes,'big')
-        message = ser.read(4*nb_elements)
-        print("NB:"+str(nb_elements))
-        print("MSG:"+str(message))
+        #print("NB:"+str(nb_elements))
+        #if(nb_elements>60):
+            #raise Exception("Bad message format")
+        encrypted_message=b''
+        for k in range(nb_elements):
+            encrypted_message+=ser.read(4)
+        cipher_decrypt = AES.new(key, AES.MODE_CFB, iv=initialisation_vector,segment_size=8)
+        message = cipher_decrypt.decrypt(encrypted_message)
+        print("NB ELEMENTS BYTES:"+str(nb_elements_as_bytes))
+        print("NB ELEMENTS:"+str(nb_elements))
+        #print("MSG:"+str(message))
+        print("MSG_ENCRYPTED:"+str(encrypted_message.hex())+"<"+str(len(encrypted_message))+">")
         for i in range(nb_elements):
             id = int.from_bytes(message[(i*4):(i*4)+2], byteorder='big')
             type = message[(i*4)+2]
@@ -100,10 +111,10 @@ while 1:
             json_val = {'id': id, 'type' : type , 'value' : val}
             mqtt_message="intensity,id=%s,type=%s values=%s" % (str(id),str(type),str(val))
             #publish(my_mqtt_client,mqtt_message)
-            #threading.Thread(target=send_json, args=(json_val,IP_HOST)).start()
+            threading.Thread(target=send_json, args=(json_val,IP_HOST)).start()
     except Exception as e:
         print("Failed to read or store data in database "+str(e))
-    
+  
 
     #mqtt_message="intensity,row=%s,col=%s values=%s" % (str(message[0]),str(message[2]),str(message[4]))
 
