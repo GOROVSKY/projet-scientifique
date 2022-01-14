@@ -3,7 +3,9 @@ import createPersistedState from "vuex-persistedstate";
 
 export default createStore({
   state: {
-    utilisateur: {}
+    utilisateur: {},
+    token: localStorage.getItem('user-token') || '',
+    status: '',
   },
   mutations: {
     connecter(state, payload) {
@@ -16,7 +18,9 @@ export default createStore({
   getters: {
     utilisateur: state => {
       return state.utilisateur
-    }
+    },
+    estAuthentifie: state => !!state.token,
+    authStatus: state => state.status,
   },
   actions: {
   },

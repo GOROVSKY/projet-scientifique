@@ -27,8 +27,11 @@
     <router-link to="/capteurType" class="mt-3"
       ><span class="fa fa-cloud-sun-rain fa-2x"></span
     ></router-link>
-    <hr />
-    <router-link to="/historique" class="mt-auto"
+    <hr>
+    <router-link to="/incident/creer" class="mt-auto"
+      ><span class="fa fa-fire-alt fa-2x"></span
+    ></router-link>
+    <router-link to="/historique" class="mt-3"
       ><span class="fa fa-history fa-2x"></span
     ></router-link>
   </div>

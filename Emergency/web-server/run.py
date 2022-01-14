@@ -26,13 +26,6 @@ def oauth_verify(*args, **kwargs):
     if request.method in ['OPTIONS', ]:
         return
 
-
-@app.route('/', methods=['GET'])
-def home():
-    return '''<h1>PROJET SCIENTIFIQUE</h1>
-<p>AHAHAH Rémi il pue</p>'''
-
-
 # A route to return all of the available entries in our catalog.
 @app.route('/api/historique', methods=['GET', 'POST'])
 def api_sensor_data():
@@ -737,6 +730,28 @@ def delete_pompier(id):
     return "", 200
 
 
+##### TYPES INCIDENT #####
+
+@app.route('/api/typeIncident', methods=['GET'])
+def get_type_incident():
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = "SELECT * from type_incident "
+
+    cur.execute(query)
+    rows = cur.fetchall()
+
+    objects_list = []
+    for row in rows:
+        d = collections.OrderedDict()
+        d["id"] = int(row["id"])
+        d["libelle"] = row["libelle"]
+        objects_list.append(d)
+    return jsonify(objects_list)
+
+
+
+
+
 ##### INCIDENT #####
 
 @app.route('/api/incident', methods=['GET'])
@@ -765,6 +780,28 @@ def get_incident(id=None):
         d["type_incident_libelle"] = row["libelle"]
         objects_list.append(d)
     return jsonify(objects_list)
+
+@app.route('/api/incident', methods=['PUT'])
+def put_incident():
+
+    element = request.json
+    if element.get("id_type_incident") is None or element.get("longitude") is None or element.get("latitude") is None:
+        abort(422)
+
+
+    try:
+        requete = "INSERT INTO incident (longitude, latitude, date_debut, id_type_incident) VALUES (%s, %s, %s, %s)"
+        values = (element.get("longitude"), element.get("latitude"), datetime.datetime.now(), element.get("id_type_incident"))
+
+        cur = conn.cursor()
+        cur.execute(requete, values)
+        conn.commit()
+    except Exception as e:
+        print(e)
+        conn.rollback()
+        return "", 400
+
+    return "", 201
 
 
 @app.route('/api/incident/historique/<id>', methods=['GET'])
@@ -825,6 +862,7 @@ def get_incident_historique(id=None):
         pompiers = cur.fetchall()
     except Exception as e:
         print(e)
+        conn.rollback()
         return "", 400
 
     # Liste en sortie
